@@ -14,7 +14,7 @@ expression RangeStart = #datetime(2021, 8, 31, 23, 59, 59) meta [IsParameterQuer
 	lineageTag: 73dd8803-d1f3-4a72-8bde-a288ae54d908
 	queryGroup: Parameters
 
-	annotation PBI_ResultType = Exception
+	annotation PBI_ResultType = DateTime
 
 	annotation PBI_NavigationStepName = Navigation
 
@@ -22,7 +22,7 @@ expression RangeEnd = #datetime(2025, 9, 1, 23, 59, 59) meta [IsParameterQuery=t
 	lineageTag: 1085734f-af51-450a-9404-40b86e8fca03
 	queryGroup: Parameters
 
-	annotation PBI_ResultType = Exception
+	annotation PBI_ResultType = DateTime
 
 	annotation PBI_NavigationStepName = Navigation
 

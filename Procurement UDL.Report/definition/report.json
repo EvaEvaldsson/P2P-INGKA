@@ -179,17 +179,6 @@
           "type": "CustomVisualMetadata"
         }
       ]
-    },
-    {
-      "name": "paretoEDD8E69761BA4B7BB3AA6D813990D7BF",
-      "type": "CustomVisual",
-      "items": [
-        {
-          "name": "paretoEDD8E69761BA4B7BB3AA6D813990D7BF.pbiviz.json",
-          "path": "paretoEDD8E69761BA4B7BB3AA6D813990D7BF.pbiviz.json",
-          "type": "CustomVisualMetadata"
-        }
-      ]
     }
   ],
   "settings": {

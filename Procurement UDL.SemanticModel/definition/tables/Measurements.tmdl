@@ -58,7 +58,7 @@ table Measurements
 
 		changedProperty = FormatString
 
-	/// This measure shows Yes for invoices that are 
+	/// This measure shows Yes for invoices that are
 	/// 
 	measure 'Invoice Matching' = ```
 			

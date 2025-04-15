@@ -38,6 +38,14 @@ table News
 
 		annotation SummarizationSetBy = Automatic
 
+	column 'Test Report'
+		dataType: string
+		lineageTag: 54505185-a8a1-40d7-a12a-f4f62ef5dca0
+		summarizeBy: none
+		sourceColumn: Test Report
+
+		annotation SummarizationSetBy = Automatic
+
 	partition News = m
 		mode: import
 		source =
@@ -46,10 +54,9 @@ table News
 				    FilteredRows_Folder = Table.SelectRows(Source, each Text.Contains([Folder Path], "https://iweof.sharepoint.com/teams/o365g_businessintelligencegroupprocurement_imssemal/Shared Documents/General/06 Team working folders/08 P2P KPIs and reports/02 - Power BI files/Information Pages/")),
 				    Navigation = FilteredRows_Folder{[Name="Information page.xlsx",#"Folder Path"="https://iweof.sharepoint.com/teams/o365g_businessintelligencegroupprocurement_imssemal/Shared Documents/General/06 Team working folders/08 P2P KPIs and reports/02 - Power BI files/Information Pages/"]}[Content],
 				    ImportedExcel = Excel.Workbook(Navigation,true),
-				    News_Sheet = ImportedExcel{[Item="News",Kind="Sheet"]}[Data],
-				    RemovedOtherColumns = Table.SelectColumns(News_Sheet,{"Report", "Date", "Information", "Author"})
+				    News_Sheet = ImportedExcel{[Item="News",Kind="Sheet"]}[Data]
 				in
-				    RemovedOtherColumns
+				    News_Sheet
 
 	annotation PBI_ResultType = Table
 

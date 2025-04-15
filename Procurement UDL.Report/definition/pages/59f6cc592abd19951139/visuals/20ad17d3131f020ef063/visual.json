@@ -38,6 +38,16 @@
               {
                 "textRuns": [
                   {
+                    "value": "evld - 2025-04-15 - implementing GitHub",
+                    "textStyle": {
+                      "fontSize": "14pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
                     "value": "chsur2 - 19th June 2024 - updated missing join between Bookmarks and GL Account Table.",
                     "textStyle": {
                       "fontSize": "14pt"
