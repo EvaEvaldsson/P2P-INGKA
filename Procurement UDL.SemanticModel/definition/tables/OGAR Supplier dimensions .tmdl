@@ -1,0 +1,50 @@
+table 'OGAR Supplier dimensions '
+	lineageTag: 1aadf85a-38ee-4e3f-bc39-cd2ef76aabea
+
+	column 'OGAR Supplier dimensions '
+		lineageTag: 4058931a-9bde-44a2-8041-8c75e68b5273
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'OGAR Supplier dimensions  Order'
+
+		relatedColumnDetails
+			groupByColumn: 'OGAR Supplier dimensions  Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'OGAR Supplier dimensions  Fields'
+		isHidden
+		lineageTag: d9de026a-e24d-44a7-8543-37a53fd97562
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'OGAR Supplier dimensions  Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'OGAR Supplier dimensions  Order'
+		isHidden
+		formatString: 0
+		lineageTag: 88606f5e-e2b7-4caa-b8e0-14e81fefbed6
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'OGAR Supplier dimensions ' = calculated
+		mode: import
+		source =
+				{
+				    ("Supplier Grouping", NAMEOF('Supplier'[Supplier Grouping]), 0),
+				    ("Supplier ID", NAMEOF('Supplier'[Supplier ID]), 1),
+				    ("Supplier Name", NAMEOF('Supplier'[Supplier Name]), 2),
+				    ("Country Name", NAMEOF('Country'[Country Name]), 3)
+				}
+
+	annotation PBI_Id = cc62790bdcf54540b3f235ac097a0b65
+

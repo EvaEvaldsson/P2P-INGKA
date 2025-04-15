@@ -1,0 +1,57 @@
+table News
+	lineageTag: 257de8b8-271e-449a-a786-2cc24499feac
+
+	column Report
+		dataType: string
+		lineageTag: 94028968-b059-48e6-894f-f7b5a40088f6
+		summarizeBy: none
+		sourceColumn: Report
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 79547ce2-99ab-4eff-951e-247db8277514
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column Information
+		dataType: string
+		lineageTag: a9462673-573b-4e6b-a94d-1eab2212e3f6
+		summarizeBy: none
+		sourceColumn: Information
+
+		annotation SummarizationSetBy = Automatic
+
+	column Author
+		dataType: string
+		lineageTag: 9691bae3-5d07-4db4-90d2-61dc38273364
+		summarizeBy: none
+		sourceColumn: Author
+
+		annotation SummarizationSetBy = Automatic
+
+	partition News = m
+		mode: import
+		source =
+				let
+				    Source = SharePoint.Files("https://iweof.sharepoint.com/teams/o365g_businessintelligencegroupprocurement_imssemal", [ApiVersion = 15]),
+				    FilteredRows_Folder = Table.SelectRows(Source, each Text.Contains([Folder Path], "https://iweof.sharepoint.com/teams/o365g_businessintelligencegroupprocurement_imssemal/Shared Documents/General/06 Team working folders/08 P2P KPIs and reports/02 - Power BI files/Information Pages/")),
+				    Navigation = FilteredRows_Folder{[Name="Information page.xlsx",#"Folder Path"="https://iweof.sharepoint.com/teams/o365g_businessintelligencegroupprocurement_imssemal/Shared Documents/General/06 Team working folders/08 P2P KPIs and reports/02 - Power BI files/Information Pages/"]}[Content],
+				    ImportedExcel = Excel.Workbook(Navigation,true),
+				    News_Sheet = ImportedExcel{[Item="News",Kind="Sheet"]}[Data],
+				    RemovedOtherColumns = Table.SelectColumns(News_Sheet,{"Report", "Date", "Information", "Author"})
+				in
+				    RemovedOtherColumns
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

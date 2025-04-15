@@ -1,0 +1,71 @@
+table 'Exchange Rate'
+	lineageTag: afaaea71-491a-4d45-8b95-837c8b49d0f4
+
+	column 'Fiscal Year Number'
+		dataType: double
+		lineageTag: af4c1018-418c-417f-b63a-a09f25ad0747
+		summarizeBy: none
+		sourceColumn: Fiscal Year Number
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Fiscal Year Name'
+		dataType: string
+		lineageTag: 9a44c9eb-2921-41c5-a2d0-26141e98d1be
+		summarizeBy: none
+		sourceColumn: Fiscal Year Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency Code From'
+		dataType: string
+		lineageTag: b4b9e78d-0768-4523-9f42-c23fea1642c5
+		summarizeBy: none
+		sourceColumn: Currency Code From
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency Code To'
+		dataType: string
+		lineageTag: c937dca0-ce96-4418-b942-92c773c3bf3c
+		summarizeBy: none
+		sourceColumn: Currency Code To
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency Exchange Rate Type'
+		dataType: string
+		lineageTag: 553c7528-b710-4b15-a9e5-be57b302e104
+		summarizeBy: none
+		sourceColumn: Currency Exchange Rate Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rate
+		dataType: double
+		lineageTag: a3f4d762-fd08-4999-8aec-13d1037645c3
+		summarizeBy: none
+		sourceColumn: Rate
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Exchange Rate-ef06b473-0147-4619-ae6b-43cdfc50a912' = m
+		mode: import
+		queryGroup: '4-Load to Model'
+		source =
+				let
+				
+				    Source = GCP_dataform_p2p_datamart,
+				    Data = Source{[Name="exchange_rate_dim_vw",Kind="View"]}[Data],
+				    RenamedColumns = Table.RenameColumns(Data,{{"rate", "Rate"}, {"currency_code_from", "Currency Code From"}, {"currency_code_to", "Currency Code To"}, {"currency_exchange_rate_type", "Currency Exchange Rate Type"}, {"fiscal_year_name", "Fiscal Year Name"}, {"fiscal_year_no", "Fiscal Year Number"}})
+				in
+				    RenamedColumns
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

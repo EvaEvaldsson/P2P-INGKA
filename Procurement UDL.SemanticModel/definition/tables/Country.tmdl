@@ -1,0 +1,46 @@
+table Country
+	lineageTag: 1e1d1eed-e680-496e-87f4-a2b4069de753
+
+	measure 'No. of countries' =
+			
+			COUNTROWS ( Country )
+		formatString: 0
+		lineageTag: 44d8317d-89aa-4e74-b624-b6f5a516c94a
+
+		changedProperty = IsHidden
+
+	column ga_code
+		dataType: string
+		lineageTag: 9d540105-ee91-417f-832d-d04779ee2d1d
+		summarizeBy: none
+		sourceColumn: ga_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Country Name'
+		dataType: string
+		lineageTag: fb9e0399-d473-449a-ad19-b4fab922b197
+		summarizeBy: none
+		sourceColumn: Country Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Country-d8691ffb-bea9-4e72-ba6f-6fb65956236b = m
+		mode: import
+		queryGroup: '4-Load to Model'
+		source = ```
+				let
+				    
+				    Source = GCP_dataform_p2p_datamart,
+				    Data = Source{[Name="country_dim_vw",Kind="View"]}[Data],
+				    RenamedColumns = Table.RenameColumns(Data, {{"name", "Country Name"}})
+				in
+				    RenamedColumns
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,36 @@
+table Bookmarks
+	lineageTag: 810a3e9d-40c8-467a-a206-977c2cc6b283
+
+	column GLOBAL_GL_No
+		dataType: int64
+		formatString: 0
+		lineageTag: a086b2a8-4c2e-4145-84f1-6ae4bdd8a7ae
+		summarizeBy: sum
+		sourceColumn: GLOBAL_GL_No
+
+		annotation SummarizationSetBy = Automatic
+
+	column Bookmark
+		dataType: string
+		lineageTag: e4a6cb52-d877-4896-9fa3-7e705a6c3591
+		summarizeBy: none
+		sourceColumn: Bookmark
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Bookmarks = m
+		mode: import
+		source = ```
+				let 
+				    
+				    Source = GCP_dataform_p2p_datamart,
+				    Data = Source{[Name="GL_Manual_Input",Kind="Table"]}[Data],
+				    RemovedColumns = Table.RemoveColumns(Data,{"GLOBAL_GL_Name", "Legacy_GL_No", "Legacy_InScope", "Spend_Group_1", "Spend_Group_2"})
+				in
+				    RemovedColumns
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

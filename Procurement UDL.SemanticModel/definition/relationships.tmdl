@@ -1,0 +1,74 @@
+relationship 1c6d10b6-f8a0-42b3-92df-15408989a73c
+	fromColumn: 'Invoice Line'.cost_centre_code
+	toColumn: 'Cost Centre'.'Cost Center Code'
+
+relationship 66ff7021-09e9-4f7c-beeb-857183c71763
+	fromColumn: 'Invoice Line'.country_code
+	toColumn: Country.ga_code
+
+relationship d626e733-396f-4df5-adac-fe42aafa4b43
+	fromColumn: 'Purchase Order Line'.cost_centre_code
+	toColumn: 'Cost Centre'.'Cost Center Code'
+
+relationship 5b9744f6-e474-4c0b-8323-f4793778b117
+	fromColumn: 'Purchase Order Line'.'Order Date'
+	toColumn: Date.'Calendar Date'
+
+relationship cb241db0-cb81-45eb-9463-2c768ae51517
+	isActive: false
+	fromColumn: Supplier.'Creation Date'
+	toColumn: Date.'Calendar Date'
+
+relationship 424a8924-4881-4eb6-8c73-5935f76935b8
+	fromColumn: 'Invoice Line'.'Transfer Date'
+	toColumn: Date.'Calendar Date'
+
+relationship 589fc242-5d85-445f-a1b5-450a17f53dbc
+	isActive: false
+	fromColumn: 'Invoice Line'.'Invoice Payment Date'
+	toColumn: Date.'Calendar Date'
+
+relationship a7e73edf-485a-480a-a546-c3f16d87e0cc
+	isActive: false
+	fromColumn: Supplier.'Valid from Date'
+	toColumn: Date.'Calendar Date'
+
+relationship 5642cbc3-19ae-4f3d-a781-15e6e37d9f3b
+	fromColumn: 'Supplier Details'.'Ordering Country  Code'
+	toColumn: Country.ga_code
+
+relationship daa83973-0763-4f37-84c0-f8300c652811
+	fromColumn: 'Purchase Order Line'.'Supplier ID'
+	toColumn: Supplier.'Supplier ID'
+
+relationship 5ad7981a-8e0f-449c-b173-2036bfb6e18a
+	fromColumn: 'Invoice Line'.'Supplier ID'
+	toColumn: Supplier.'Supplier ID'
+
+relationship e83b987b-6c74-4831-bfb8-bead32d791bb
+	fromColumn: 'Supplier Details'.'Supplier ID'
+	toColumn: Supplier.'Supplier ID'
+
+relationship 1177d64c-e139-4fe3-8a2f-e1d8750feef8
+	fromColumn: 'Invoice Line'.legal_unit_id
+	toColumn: 'Legal Unit'.'Legal Unit ID'
+
+relationship 71020cfd-9617-a96e-f10b-8d6ce7b1bd9e
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Invoice Line'.global_GL_no
+	toColumn: 'GL account'.'GL Account Number'
+
+relationship AutoDetected_78688941-2444-486c-86ee-cb422867f762
+	isActive: false
+	fromColumn: 'Legal Unit'.'Country.Country Name'
+	toColumn: Country.'Country Name'
+
+relationship 2831ced4-5b64-4851-afe0-5638da5f1624
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Invoice Line'.'BU Code'
+	toColumn: 'Business Unit'.'Business Unit ID'
+
+relationship 9707e317-e8eb-432c-b865-0a8b5d274764
+	fromColumn: 'Purchase Order Line'.legal_unit_code
+	toColumn: 'Legal Unit'.legal_unit_code
+

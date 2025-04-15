@@ -1,0 +1,64 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-GB
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup '1-Data Sources'
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup '4-Load to Model'
+
+	annotation PBI_QueryGroupOrder = 3
+
+queryGroup 'old tables'
+
+	annotation PBI_QueryGroupOrder = 4
+
+queryGroup Parameters
+
+	annotation PBI_QueryGroupOrder = 0
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["GCP_environments","GCP_dataform_p2p_datamart","GCP_dataform_procBi_datamart","Company Function names","Purchase Order Line","Business Unit","Business Unit (pnl)","Cost Centre","Country","Date","Exchange Rate","GL account","Supplier","Supplier Details","Invoice Line","Legal Unit","Measurements","EnvType","RangeStart","RangeEnd","Model Info","iShop Content","Invoice summary Basware PQ","PO Summary","GCP_Golden-1","GCP_Golden_2","New_Goden_supplier","Bookmarks","Report_Source","News"]
+
+annotation PBIDesktopVersion = 2.141.1558.0 (25.03)+75b5f06a991f8f8a8a4d6b6fcd0f66e1ec2d6fdc
+
+annotation __TEdtr = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'Legal Unit'
+ref table Supplier
+ref table 'GL account'
+ref table 'Exchange Rate'
+ref table 'Cost Centre'
+ref table Date
+ref table Country
+ref table 'Invoice Line'
+ref table Measurements
+ref table 'Purchase Order Line'
+ref table 'Supplier Details'
+ref table 'Model Info'
+ref table 'Summarized IM Supplier and Country'
+ref table 'iShop Content'
+ref table 'Company Function names'
+ref table 'Invoice summary Basware'
+ref table 'PO summary iShop'
+ref table Bookmarks
+ref table Report_Source
+ref table News
+ref table 'Business Unit'
+ref table 'zData Dictionary'
+ref table 'P2P Supplier dimensions'
+ref table 'OGAR Supplier dimensions '
+
+ref perspective 'BN report Perspective'
+
+ref cultureInfo en-US
+

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Procurement UDL"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ecb2f786-e1ec-45a7-8e4b-19933fe647e2"
+  }
+}

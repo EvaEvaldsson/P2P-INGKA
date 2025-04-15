@@ -1,0 +1,35 @@
+table 'Company Function names'
+	lineageTag: 706677d8-07da-439b-a255-c1dda30b0a1e
+
+	column company_function_prefix
+		dataType: string
+		lineageTag: cb02d7ed-a211-4ebf-a4ec-48dcae4dfe24
+		summarizeBy: none
+		sourceColumn: company_function_prefix
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Company Function'
+		dataType: string
+		lineageTag: 312a3714-07fa-47fb-bd54-a477916d2d5d
+		summarizeBy: none
+		sourceColumn: Company Function
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Company Function names-f9d10ac2-d782-410e-9ef2-27e440df5b8f' = m
+		mode: import
+		queryGroup: '4-Load to Model'
+		source =
+				let
+				    Source = GCP_dataform_p2p_datamart,
+				    Data = Source{[Name="company_functions",Kind="View"]}[Data],
+				    RenamedColumns = Table.RenameColumns(Data,{{"company_function_name", "Company Function"}})
+				
+				in
+				    RenamedColumns
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

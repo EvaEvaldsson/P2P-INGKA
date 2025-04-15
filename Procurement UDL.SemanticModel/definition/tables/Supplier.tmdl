@@ -1,0 +1,769 @@
+table Supplier
+	lineageTag: 05bae868-86ec-4283-9479-a271879e0a85
+
+	measure 'No. of Suppliers' =
+			
+			DISTINCTCOUNT ( Supplier[indirect_vendor_bk] )
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: 0a0a6d26-a0bb-404b-bd85-c34e9cf1e9e6
+
+		changedProperty = IsHidden
+
+		changedProperty = DisplayFolder
+
+	measure 'No. of Suppliers Created' =
+			
+			CALCULATE (
+			    [No. of Suppliers],
+			    Supplier[Supplier Type] IN {"ISV", "Z002", "Z015"},
+			    USERELATIONSHIP ( Supplier[Creation Date], 'Date'[Calendar Date] )
+			)
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: c6bc4715-d227-43fa-9b9f-a5f3b29bfdb5
+
+		changedProperty = IsHidden
+
+		changedProperty = DisplayFolder
+
+	measure 'ISV Suppliers' =
+			
+			CALCULATE ( COUNTROWS ( Supplier ), Supplier[Supplier Type] = "ISV" )
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: 34f07ab8-3d64-401b-93b7-553a9b89148a
+
+		changedProperty = IsHidden
+
+		changedProperty = DisplayFolder
+
+	measure 'No. of Approved suppliers' =
+			
+			CALCULATE (
+			    DISTINCTCOUNT ( Supplier[Supplier ID] ),
+			    Supplier[Stop sup inflow Approved or Not approved] = "Approved suppliers"
+			)
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: 4902ee13-263d-48ed-8f67-6a77cbe24318
+
+		changedProperty = IsHidden
+
+		changedProperty = DisplayFolder
+
+	measure 'No. of Not approved suppliers' =
+			
+			CALCULATE (
+			    DISTINCTCOUNT ( Supplier[Supplier ID] ),
+			    Supplier[Stop sup inflow Approved or Not approved] = "Not approved suppliers"
+			)
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: 5642b7c2-3eb9-4aa3-8975-a23a47d27bae
+
+		changedProperty = IsHidden
+
+		changedProperty = DisplayFolder
+
+	measure 'Total no. of Approved and not approved suppliers' =
+			
+			[No. of Approved suppliers] + [No. of Not approved suppliers]
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: 401b1ead-d0a2-4731-8838-54a97881c823
+
+		changedProperty = IsHidden
+
+		changedProperty = DisplayFolder
+
+	measure 'No. of Suppliers Valid' = ```
+			
+			CALCULATE (
+			    [No. of Suppliers],
+			    // Supplier[Supplier Type]="ISV",  
+			    USERELATIONSHIP ( Supplier[Valid from Date], 'Date'[Calendar Date] )
+			)
+			```
+		displayFolder: .Measures
+		lineageTag: 48473e15-9543-4d5f-a7d3-f5a27f175b78
+
+	measure 'Active Contracts' =
+			
+			CALCULATE (
+			    CONCATENATEX (
+			        VALUES ( Contract[Contract Number] ),
+			        Contract[Contract Number],
+			        ", "
+			    ),
+			    Contract[Contract Status Calculated] = "Complete",
+			    //FILTER(Supplier,Supplier[Supplier ID] = SELECTEDVALUE(Supplier[Supplier ID])),
+			    FILTER (
+			        Supplier,
+			        Supplier[Tax Registration Number]
+			            = SELECTEDVALUE ( Supplier[Tax Registration Number] )
+			    )
+			)
+		displayFolder: .Measures
+		lineageTag: d56b9252-f6b8-46da-9685-f230d9f8955b
+
+	measure 'No. of Suppliers (Contract)' =
+			
+			CALCULATE (
+			    [No. of Suppliers],
+			    CROSSFILTER ( Supplier[Supplier ID], Contract[Supplier ID], BOTH )
+			)
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: 915d3997-3849-4cd0-8d1e-deb1cc2d505c
+
+	measure 'Supplier Spend Classification' =
+			
+			CALCULATE(
+			    SWITCH (
+			        TRUE(),
+			        [Invoiced Amount EUR] > 100000, "Above 100k EUR",
+			        [Invoiced Amount EUR] <= 100000
+			            && [Invoiced Amount EUR] > 10000, "Between 10k EUR and 100k EUR",
+			        [Invoiced Amount EUR] <= 10000, "Below 10k EUR"
+			    )
+			)
+		lineageTag: 370cf00a-7610-4341-8771-c3698ebc9cee
+
+	column indirect_vendor_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: bc148abe-af2b-434e-97e4-36e6fb42c345
+		summarizeBy: sum
+		sourceColumn: indirect_vendor_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column indirect_vendor_bk
+		dataType: string
+		lineageTag: e6698cc7-fe0c-46b5-911a-ce24d6191a80
+		summarizeBy: none
+		sourceColumn: indirect_vendor_bk
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier Short Name'
+		dataType: string
+		lineageTag: fc0bde9d-7783-4a72-bc4c-28e17e734ea5
+		summarizeBy: none
+		sourceColumn: Supplier Short Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier Name'
+		dataType: string
+		lineageTag: 2829cdc5-246d-4f1d-b2d5-7fdbc3bc1c65
+		summarizeBy: none
+		sourceColumn: Supplier Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier Code'
+		dataType: string
+		lineageTag: 1dd639d6-905f-4f93-b2d9-bfd5f2881fe6
+		summarizeBy: none
+		sourceColumn: Supplier Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier Type'
+		dataType: string
+		lineageTag: 7dea5133-ba2a-4dbf-af52-673f9a64c9e7
+		summarizeBy: none
+		sourceColumn: Supplier Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Street
+		dataType: string
+		lineageTag: 883e5607-f21f-46df-814c-4f22a18d870e
+		summarizeBy: none
+		sourceColumn: Street
+
+		annotation SummarizationSetBy = Automatic
+
+	column Postbox
+		dataType: string
+		lineageTag: 7932fb09-1fef-4418-9a48-94cbe6be87bc
+		summarizeBy: none
+		sourceColumn: Postbox
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: 535195e7-6bbd-44e4-ada6-f41d6092782c
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Postal Code'
+		dataType: string
+		lineageTag: b85174e1-6096-4b67-a3c3-e7c38e7730a3
+		summarizeBy: none
+		sourceColumn: Postal Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: a9af75ff-9a2e-4ac4-b0a6-a58d196b6ab2
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Country Code'
+		dataType: string
+		lineageTag: ac741d35-6214-41e8-9a35-d8b278d3968e
+		summarizeBy: none
+		sourceColumn: Country Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Terms of Payment'
+		dataType: string
+		lineageTag: fecb3a72-6b74-42d3-a193-4e39d00224b3
+		summarizeBy: none
+		sourceColumn: Terms of Payment
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Creation Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: e2939675-d192-4129-91fb-a391e2f199f8
+		summarizeBy: none
+		sourceColumn: Creation Date
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Valid from Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: c07a2170-4911-465c-8a4d-256446ddcee1
+		summarizeBy: none
+		sourceColumn: Valid from Date
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Additional Address Information'
+		dataType: string
+		lineageTag: 06439271-6da8-40e1-bdad-5af5e416dff8
+		summarizeBy: none
+		sourceColumn: Additional Address Information
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CO Address'
+		dataType: string
+		lineageTag: c3951986-e1ee-448f-9c6f-92b074bf1790
+		summarizeBy: none
+		sourceColumn: CO Address
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Preferred Order Method'
+		dataType: string
+		lineageTag: 34b11779-d43e-4939-818d-63950df5da53
+		summarizeBy: none
+		sourceColumn: Preferred Order Method
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Valid to Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: f569b5c0-826b-43c2-9b2e-a567f5081652
+		summarizeBy: none
+		sourceColumn: Valid to Date
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'First Ever Invoice Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 64353559-c2f3-4504-942b-70e2a75d5642
+		summarizeBy: none
+		sourceColumn: First Ever Invoice Date
+
+		changedProperty = FormatString
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Update Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 1f320b64-3a14-405b-b52a-af442f22f436
+		summarizeBy: none
+		sourceColumn: Update Date
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Has iContract Contract' =
+			
+			/*
+			CONTAINS ( RELATEDTABLE ( Contract ), Contract[Source System], "icontract" )
+			*/
+		formatString: 0
+		lineageTag: 792cf6be-8b59-4614-8abd-8176a478f83b
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Stop sup inflow Rank' =
+			
+			RANKX(
+			    FILTER(Supplier,Supplier[Tax Registration Number] <> BLANK()
+			    && Supplier[Tax Registration Number] = EARLIER(Supplier[Tax Registration Number])),
+			    Supplier[Creation Date],,ASC,Dense)
+		formatString: 0
+		lineageTag: 4a6d5847-164c-497e-97bd-bebf06c359e1
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Stop Sup inflow Exclude' =
+			
+			
+			IF(Supplier[Stop sup inflow Rank]>1,"Exclude",
+			
+			IF(Supplier[Supplier Type]="COM","Exclude",
+			
+			IF(Supplier[Additional Address Information]="DUPLICATE","Exclude",
+			
+			IF(Supplier[Additional Address Information]="DUBLICATE","Exclude",
+			
+			IF(Supplier[Additional Address Information]="DULICATE","Exclude",
+			
+			IF(Supplier[Additional Address Information]="DUPLICATEE","Exclude",
+			
+			"Include"))))))
+		lineageTag: 11524413-a61f-4430-86e7-568d65ce87e9
+		summarizeBy: none
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Stop sup inflow Approved or Not approved' =
+			
+			
+			IF (
+			   Supplier[First Ever Invoice Date] = BLANK (),
+			    "Approved suppliers",
+			    IF (
+			       Supplier[First Ever Invoice Date]<=Supplier[Creation Date],
+			        "Not approved suppliers",
+			        "Approved suppliers"
+			    )
+			)
+		lineageTag: 6c29226d-5508-46bb-9b51-bae0624e719e
+		summarizeBy: none
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column scd_curr_ind
+		dataType: string
+		lineageTag: 883d4a8d-a056-4cbb-85ce-99a7cb14233e
+		summarizeBy: none
+		sourceColumn: scd_curr_ind
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Creation Month' = FORMAT(Supplier[Creation Date], "YYYY-MM")
+		lineageTag: a562ee79-2de2-41af-96b6-92d68ba4cb40
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Update Month' = FORMAT(Supplier[Update Date],"yyyy-mm")
+		lineageTag: 2153406f-8b40-426a-ae0a-3aa508911e22
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Has Advantum Contract' = ```
+			
+			/*
+			CONTAINS ( RELATEDTABLE ( Contract ), Contract[Source System], "Advantum" )
+			*/
+			
+			```
+		formatString: 0
+		lineageTag: be09bd8f-1489-4494-aab1-e2397a270da4
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Has Invoiced amount' = if([Invoiced Amount EUR]=0,"No","Yes")
+		lineageTag: 522d2907-9999-47ce-bbe7-fa49d237d0d5
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PO''s per Supplier' = CALCULATE(DISTINCTCOUNT('Purchase Order Line'[Order Number]),RELATEDTABLE('Purchase Order Line'))
+		formatString: 0
+		lineageTag: 666125bd-b2ff-4de8-a3ba-f468b346db68
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Active supplier' = ```
+			
+			IF (
+			    Supplier[Valid from Date] < TODAY (),
+			    IF (
+			        Supplier[Valid to Date] > TODAY ()
+			            || Supplier[Valid to Date] = BLANK (),
+			        "Active",
+			        "Not Active"
+			    )
+			)
+			
+			```
+		lineageTag: d3000e8b-29a4-45f6-9b1f-6f53b2b0a2e9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Valid from FY' = CONCATENATE("FY",Right( if(MONTH(Supplier[Valid from Date])<=8, Year(Supplier[Valid from Date]),YEAR(Supplier[Valid from Date])+1),2))
+		lineageTag: d47edf1e-20dd-4d71-82f1-30b4aa3962cb
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Valid from Period' =
+			
+			IF (
+			    MONTH ( Supplier[Valid from Date] ) < 9,
+			    MONTH ( Supplier[Valid from Date] ) + 04,
+			    MONTH ( Supplier[Valid from Date] ) - 8
+			)
+		formatString: 0
+		lineageTag: 8aaf2a74-b355-449c-883b-ae8eacd2c0ab
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Valid from FY-Period' =
+			
+			IF (
+			    Supplier[Valid from Period] < 10,
+			    Supplier[Valid from FY] & "-0" & Supplier[Valid from Period],
+			    Supplier[Valid from FY] & "-" & Supplier[Valid from Period]
+			)
+		lineageTag: c1b5df3a-943b-49c7-b833-73fdc3fe979f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier creation FY' =
+			
+			/*
+			VAR fy =
+			IF (
+			MONTH ( Supplier[Creation Date] ) <= 8,
+			VALUE ( FORMAT ( Supplier[Creation Date], "YY" ) ),
+			VALUE ( FORMAT ( Supplier[Creation Date], "YY" ) ) + 1
+			)
+			RETURN
+			IF ( fy < 10, CONCATENATE ( "FY0", fy ), CONCATENATE ( "FY", fy ) )
+			
+			*/
+		formatString: 0
+		lineageTag: 81ec4dcc-1965-40d9-a9fa-1e4f7b12a3b2
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier Creation Period' =
+			
+			/*
+			IF (
+			MONTH ( Supplier[Creation Date] ) >= 9,
+			VALUE ( FORMAT ( Supplier[Creation Date], "MM" ) ) - 8,
+			VALUE ( FORMAT ( Supplier[Creation Date], "MM" ) ) + 4
+			)
+			*/
+		lineageTag: 65a27b12-0b4d-4fbe-b5ee-b3296aa67804
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Supplier Creation FY-Period' =
+			
+			/*
+			Supplier[Supplier creation FY] & "-"
+			& IF ( Supplier[Supplier Creation Period] < 10, "0" & Supplier[Supplier Creation Period], Supplier[Supplier Creation Period] )
+			*/
+		formatString: 0
+		lineageTag: 007fe233-204f-4052-9465-a36bc42dbebd
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Accounting Currency Code'
+		dataType: string
+		lineageTag: eaafff0e-c0f3-430d-852f-d9d0862bd0f5
+		summarizeBy: none
+		sourceColumn: Accounting Currency Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Bank Currency Code'
+		dataType: string
+		lineageTag: 106ec6dd-ad3d-479e-9e20-acf8ae58a004
+		summarizeBy: none
+		sourceColumn: Bank Currency Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Address Type'
+		dataType: string
+		lineageTag: 88b7be8d-6c26-4ea8-b090-76628fbe01cd
+		summarizeBy: none
+		sourceColumn: Address Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Bank Country Code'
+		dataType: string
+		lineageTag: 39ec5d12-1207-4861-8e92-15263543dcfa
+		summarizeBy: none
+		sourceColumn: Bank Country Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column supplier_currency_code
+		dataType: string
+		lineageTag: b5d8cf5f-a550-476b-b151-0cf97ae17ca5
+		summarizeBy: none
+		sourceColumn: supplier_currency_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dynamic Supplier Rank' = ```
+			RANKX('supplier',[Invoiced Amount EUR],,DESC,Dense) 
+			```
+		formatString: 0
+		lineageTag: b118ed72-7252-4576-8ad2-a80d9e11f730
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Suppliers per Tax Reg No' = //temp
+		formatString: 0
+		lineageTag: 04171c3c-9a33-422a-b679-0c916baad248
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Spend Classification (CFY)' =
+			CALCULATE(
+			    SWITCH (
+			        TRUE(),
+			        [Invoiced Amount EUR] > 100000, "A. Above 100k EUR",
+			        [Invoiced Amount EUR] <= 100000
+			            && [Invoiced Amount EUR] > 10000, "B. Between 10k and 100k EUR",
+			        [Invoiced Amount EUR] <= 10000, "C. Below 10k EUR"
+			    )
+			    ,'Date'[Relative Fiscal Year Number]=0
+			)
+		lineageTag: 9fbe4b97-22bb-41c6-9269-c7f1382bdd23
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Spend Classification (LFY)' =
+			CALCULATE(
+			    SWITCH (
+			        TRUE(),
+			        [Invoiced Amount EUR] > 100000, "A. Above 100k EUR",
+			        [Invoiced Amount EUR] <= 100000
+			            && [Invoiced Amount EUR] > 10000, "B. Between 10k and 100k EUR",
+			        [Invoiced Amount EUR] <= 10000, "C. Below 10k EUR"
+			    )
+			    ,'Date'[Relative Fiscal Year Number]=-1
+			)
+		lineageTag: 11bdf9e1-caf5-4a1b-b475-caa10f3be815
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column externalId
+		dataType: string
+		lineageTag: 65ff7c41-9711-4d60-852e-0b35559f76f3
+		summarizeBy: none
+		sourceColumn: externalId
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Business Responsible Name'
+		dataType: string
+		lineageTag: 22b56f58-b0fa-4ce2-9407-767235cbd731
+		summarizeBy: none
+		sourceColumn: Business Responsible Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_system
+		dataType: string
+		lineageTag: 0cac1dc1-0106-4c09-b3bb-59bc7dcbbd81
+		summarizeBy: none
+		sourceColumn: source_system
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Internal Spend'
+		dataType: string
+		lineageTag: 48185a37-1908-414f-937d-33260f4c85d8
+		summarizeBy: none
+		sourceColumn: Internal Spend
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier ID'
+		dataType: string
+		lineageTag: 5d3c7649-120e-4be9-aea6-3320bf94537d
+		summarizeBy: none
+		sourceColumn: Supplier ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column includesupplier
+		dataType: string
+		lineageTag: 680156f5-160d-409e-828c-74a96b7621eb
+		summarizeBy: none
+		sourceColumn: includesupplier
+
+		annotation SummarizationSetBy = Automatic
+
+	column count_indicator
+		dataType: int64
+		formatString: 0
+		lineageTag: 45bc5f4c-0007-4e5d-9822-0bfa2cba01b8
+		summarizeBy: sum
+		sourceColumn: count_indicator
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tax Registration Number'
+		dataType: string
+		lineageTag: 28863f34-0e82-4b38-90a9-5a2a150a8976
+		summarizeBy: none
+		sourceColumn: Tax Registration Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column Supplier_Country_Name = LOOKUPVALUE(Country[Country Name],Country[ga_code],Supplier[Country Code])
+		lineageTag: ee397c57-21fa-41af-b5bb-0067a47b1c68
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier Grouping'
+		dataType: string
+		lineageTag: b166810f-4886-4e72-b8a0-aef37b173118
+		summarizeBy: none
+		sourceColumn: Supplier Grouping
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Category Area'
+		dataType: string
+		lineageTag: 68f07093-319f-45c4-9220-ffa1f3ee06fc
+		summarizeBy: none
+		sourceColumn: Category Area
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: c7830988-8258-47e5-a639-b6bceb1e258a
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sub Category'
+		dataType: string
+		lineageTag: 0910138a-f51e-4ee8-805b-3bc17289aee8
+		summarizeBy: none
+		sourceColumn: Sub Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier Classification'
+		dataType: string
+		lineageTag: 154ae7de-76aa-4e23-b73a-1fd3826e45de
+		summarizeBy: none
+		sourceColumn: Supplier Classification
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Supplier-9cfaa501-414e-4361-9520-40308c0b0c5f = m
+		mode: import
+		queryGroup: '4-Load to Model'
+		source = ```
+				let 
+				
+				    Source = GCP_dataform_p2p_datamart,
+				    Data = Source{[Name="supplier_dim_vw",Kind="View"]}[Data],
+				    RemovedColumns = Table.RemoveColumns(Data,{"scd_start_dttm", "scd_end_dttm", "scd_record_hash", "ingest_dttm", "audit_payload", "ingestion_time"}),
+				    RenamedColumns = Table.RenameColumns(RemovedColumns,{{"indirect_vendor_full_name", "Supplier Name"}, {"city", "City"}, {"state", "State"}, {"street", "Street"}, {"terms_of_payment", "Terms of Payment"}, {"postal_code", "Postal Code"}, {"postbox", "Postbox"}, {"preferred_order_method", "Preferred Order Method"}, {"co_address", "CO Address"}, {"supplier_id", "Supplier ID"}, {"creation_date", "Creation Date"}, {"first_ever_invoice_date", "First Ever Invoice Date"}, {"valid_from_date", "Valid from Date"}, {"valid_to_date", "Valid to Date"}, {"indirect_vendor_code", "Supplier Code"}, {"indirect_vendor_short_name", "Supplier Short Name"}, {"indirect_vendor_type", "Supplier Type"}, {"internal_spend", "Internal Spend"}, {"address_additional_information", "Additional Address Information"}, {"country_code", "Country Code"}, {"update_date", "Update Date"}, {"bank_currency_code", "Bank Currency Code"}, {"address_type", "Address Type"}, {"bank_country_code", "Bank Country Code"}, {"business_responsible_name", "Business Responsible Name"}, {"accounting_currency_code", "Accounting Currency Code"}, {"tax_registration_number", "Tax Registration Number"}, {"Supplier_Classification", "Supplier Classification"}, {"Ingka_Sub_Category", "Sub Category"}, {"Organizational_Category", "Category"}, {"Supplier_Grouping", "Supplier Grouping"}, {"Organizational_Category_Area", "Category Area"}}),
+				    ChangedType = Table.TransformColumnTypes(RenamedColumns,{{"First Ever Invoice Date", type datetime}})
+				in
+				    ChangedType
+				```
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,984 @@
+table 'Invoice Line'
+	lineageTag: 2369565c-a167-4749-bfe0-c6ed6283e2c0
+
+	measure 'No. of invoices' =
+			
+			DISTINCTCOUNT ( 'Invoice Line'[Invoice Reference ID] )
+		formatString: #,0
+		displayFolder: .Measures
+		lineageTag: c8b1cd12-8f53-4935-bc75-924d8ee5fe6d
+
+		changedProperty = IsHidden
+
+	measure 'No. of invoice lines' =
+			
+			COUNTROWS ( 'Invoice Line' )
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: bd9acb0a-ef52-4536-a0bd-e2727d242bd8
+
+	measure sf_invoicelines =
+			
+			INT ( NOT ISEMPTY ( 'Invoice Line' ) )
+		formatString: 0
+		displayFolder: ..Report Design Measures
+		lineageTag: f39c879d-6eba-4632-a3d3-04f522459dd7
+
+	measure Measure =
+			
+			0.34
+		formatString: 0%;-0%;0%
+		displayFolder: .Measures
+		lineageTag: 1c0346fe-8101-4142-844a-50811429bf4b
+
+		changedProperty = FormatString
+
+		changedProperty = DisplayFolder
+
+	measure 'No. of orders' =
+			
+			DISTINCTCOUNT ( 'Invoice Line'[Order Number] )
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: 058f2e8c-5b52-42cb-9fc3-f6e20dceb937
+
+		changedProperty = DisplayFolder
+
+	measure 'BU with Invoices' =
+			
+			DISTINCTCOUNT ( 'Invoice Line'[BU Code] )
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: 16104b08-97b4-4793-a9fa-2a7916634f4d
+
+		changedProperty = DisplayFolder
+
+	measure 'No. of Invoices (ex. SB)' = ```
+			
+			CALCULATE (
+			    [No. of invoices],
+			    'GL account'[Spend Group 1] <> "Service business costs"
+			)
+			
+			```
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: 39dc2ecf-9f58-416d-af32-c92ba1f6d936
+
+		changedProperty = DisplayFolder
+
+	measure 'No. of invoices payed' =
+			
+			CALCULATE (
+			    [No. of invoices],
+			    ISBLANK ( 'Invoice Line'[Invoice Payment Date] ) = FALSE ()
+			)
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: 5d552534-206e-4333-b7a6-1f759e4297d8
+
+		changedProperty = DisplayFolder
+
+	measure 'No. of invoices by payment date' = ```
+			
+			CALCULATE (
+			    DISTINCTCOUNT ( 'Invoice Line'[Invoice Reference ID] ),
+			    USERELATIONSHIP ( 'Date'[Calendar Date], 'Invoice Line'[Invoice Payment Date] )
+			)
+			
+			```
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: fa2efda2-3e19-4b6c-a9da-e99c63758563
+
+		changedProperty = DisplayFolder
+
+	measure 'Latest Invoice' =
+			
+			LASTNONBLANKVALUE ( 'Invoice Line'[Invoice Date], MAX ( 'Invoice Line'[pre_link] ) )
+		displayFolder: .Measures
+		lineageTag: f31f573c-f105-4587-92ac-bb8bf75546a3
+		dataCategory: WebUrl
+
+	measure 'PO after the Invoice' = ```
+			
+			DIVIDE (
+			    CALCULATE (
+			        'Invoice Line'[No. of invoices],
+			        'Invoice Line'[Invoice after PO] = "No"
+			    ),
+			    'Invoice Line'[No. of invoices]
+			)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: .Measures
+		lineageTag: 9a450d5e-7db9-4817-baac-8730fc5bcc1c
+
+		changedProperty = FormatString
+
+	measure 'No. of Invoices with POs' = ```
+			
+			CALCULATE (
+			    DISTINCTCOUNT ( 'Invoice Line'[Order Number] ),
+			    LEN ( 'Invoice Line'[Order Number] ) > 1
+			        && 'Invoice Line'[Order Number] <> "None"
+			)
+			
+			```
+		formatString: #,0
+		displayFolder: .Measures
+		lineageTag: da5bc6f4-efaf-4de0-9595-3d23afab92a2
+
+		changedProperty = FormatString
+
+	measure 'No. of orders per invoice' =
+			
+			DISTINCTCOUNTNOBLANK ( 'Invoice Line'[Order Number] )
+		formatString: 0
+		lineageTag: d54caa17-81bc-4821-a2bb-95ab151e68c3
+
+	measure 'Invoicing country' = ```
+			
+			CALCULATE (
+			    SELECTEDVALUE ( 'Invoice Line'[country_code], "Multiple countries" ),
+			    KEEPFILTERS ( 'Invoice Line' )
+			)
+			
+			```
+		lineageTag: 1b8cc568-8fcb-498a-bf72-78fbe036332b
+
+	measure '30 No of inv paid on time' = ```
+			
+			CALCULATE ( [Invoices payed], 'Invoice Line'[30 Has payment on time] = "Yes" )
+			
+			```
+		formatString: 0
+		lineageTag: 3e3dde43-f3f7-4626-a9af-969a195ae890
+
+	measure '30 Share of invoices payed on time' = ```
+			
+			DIVIDE (
+			    IF (
+			        ISBLANK ( 'Invoice Line'[30 No of inv paid on time] ),
+			        0,
+			        'Invoice Line'[30 No of inv paid on time]
+			    ),
+			    [Invoices payed]
+			)
+			
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 86a106f5-bdc1-4302-abf1-bfdeb0c9d27d
+
+		changedProperty = FormatString
+
+	measure net =
+			
+			SUM('Invoice Line'[net_amount_eur])
+		displayFolder: .Measures
+		lineageTag: 9db51dce-6491-4fc7-8e72-b28f28576db6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'No. of invoices Adjusted' =
+			
+			CALCULATE(
+			    [No. of invoices],
+			    'Invoice Line'[Include_in_adjusted_KPI]="1"
+			    )
+		formatString: #,0
+		displayFolder: .Measures
+		lineageTag: b6f2b607-42d0-4f3b-a9c1-dbb437e03c28
+
+	measure 'No of invoices Adj prio Classification' =
+			
+			CALCULATE (
+			    [No. of invoices],
+			    'Supplier'[Supplier Classification] = "Strategic" || 'Supplier'[Supplier Classification] = "Tactical" || 'Supplier'[Supplier Classification] = "Preferred"
+			)
+		formatString: #,0
+		displayFolder: .Measures
+		lineageTag: fd05911e-b853-4c93-94e8-c7322f024cd3
+
+	column doc_id
+		dataType: string
+		lineageTag: 45b4c89c-2d59-49af-a283-75836b070f2d
+		summarizeBy: none
+		sourceColumn: doc_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column net_amount
+		dataType: double
+		lineageTag: 37f93ec9-1ae6-4f1e-bda4-bc620f19c3ac
+		summarizeBy: none
+		sourceColumn: net_amount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column cost_centre_code
+		dataType: string
+		lineageTag: 4199ab2c-017a-4141-8f47-9a2865628509
+		summarizeBy: none
+		sourceColumn: cost_centre_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column manual_handling
+		dataType: string
+		lineageTag: 75e72ae2-635a-418d-a1a5-fd1bfb0ca877
+		summarizeBy: none
+		sourceColumn: manual_handling
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column country_code
+		dataType: string
+		lineageTag: 77502946-1ca9-422d-bfc1-b94ae0acc693
+		summarizeBy: none
+		sourceColumn: country_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column net_amount_eur
+		dataType: double
+		lineageTag: b5844973-9853-4724-aaac-5147736ee7c2
+		summarizeBy: none
+		sourceColumn: net_amount_eur
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column business_unit_type
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: 25a941f3-92c4-47c8-be52-ba9d3b9019c3
+		summarizeBy: none
+		sourceColumn: business_unit_type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column business_unit_code
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: ec5aa4b7-4188-48c0-88e4-c137b231e1b6
+		summarizeBy: none
+		sourceColumn: business_unit_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendor_type
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: 0da7faff-7c96-4e7a-ad3e-f6677d9b36ef
+		summarizeBy: none
+		sourceColumn: vendor_type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendor_code
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: 5e9c176a-56ab-4a35-8c43-b43e0051223e
+		summarizeBy: none
+		sourceColumn: vendor_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_group_sort
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 51d6d178-5124-4039-b8bd-ee004ae82d68
+		summarizeBy: none
+		sourceColumn: payment_group_sort
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column 'Invoice Line Number'
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 141b3edd-6d2f-4f3f-b361-b5dbd14b2ac8
+		summarizeBy: sum
+		sourceColumn: Invoice Line Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Invoice Reference ID'
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: 2a33b543-1b73-4947-be24-7376d30bf51e
+		summarizeBy: none
+		sourceColumn: Invoice Reference ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier Invoice Number'
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: 9ae007ca-1884-4325-840a-61b5720d4ec7
+		summarizeBy: none
+		sourceColumn: Supplier Invoice Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency Code'
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: 1072a67d-68fa-47ce-9cb1-586d8bddcca8
+		summarizeBy: none
+		sourceColumn: Currency Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Number'
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: 8ca5d02c-d680-4dc1-9f05-346d732b6dd5
+		summarizeBy: none
+		sourceColumn: Order Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Match Status'
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: a109fece-6b55-45e4-ae39-30dd2c18bb6f
+		summarizeBy: none
+		sourceColumn: Match Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Source Contract Number'
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: 10c9e0d6-7e04-42d3-911d-3c00b079f36b
+		summarizeBy: none
+		sourceColumn: Source Contract Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'GL Account Number'
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: bcddc814-7e59-4f87-a2fd-a7e6c3daec92
+		summarizeBy: none
+		sourceColumn: GL Account Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Invoice Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		sourceProviderType: date
+		lineageTag: 5eee3629-291c-4ea7-9075-3300d06dd06c
+		summarizeBy: none
+		sourceColumn: Invoice Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Entry Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		sourceProviderType: date
+		lineageTag: 8b7ef2c7-0864-4513-840a-228b94f1634d
+		summarizeBy: none
+		sourceColumn: Entry Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Transfer Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 38993817-ee14-4d15-a826-1c901581b068
+		summarizeBy: none
+		sourceColumn: Transfer Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Invoice Payment Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 33998875-997d-4120-851b-90c6e3e8a687
+		summarizeBy: none
+		sourceColumn: Invoice Payment Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Due Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		sourceProviderType: date
+		lineageTag: 7c2c0c10-28e4-4aa4-9b01-db20568d2f0b
+		summarizeBy: none
+		sourceColumn: Due Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Has GL Account'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 9864cf4e-d886-4197-be7c-721c0606f7e2
+		summarizeBy: none
+		sourceColumn: Has GL Account
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Payment Terms'
+		dataType: string
+		lineageTag: 33641502-65e0-4252-bf4d-ba269eb7fb99
+		summarizeBy: none
+		sourceColumn: Payment Terms
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Payment Group'
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: 531b5112-b657-49ff-8e3a-f5856d1db990
+		summarizeBy: none
+		sourceColumn: Payment Group
+		sortByColumn: payment_group_sort
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Has Valid Contract'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: f76128ab-1518-4718-8403-4d75e8b46920
+		summarizeBy: none
+		sourceColumn: Has Valid Contract
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Invoice Supplier Rank' = ```
+			
+			RANKX (
+			    FILTER (
+			        'Invoice Line',
+			        'Invoice Line'[Supplier ID] = EARLIER ( 'Invoice Line'[Supplier ID] )
+			    ),
+			    'Invoice Line'[Invoice Date],
+			    ,
+			    ASC,
+			    DENSE
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 59041305-5e14-4404-9e3d-b634763864ca
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column include_in_p2p_load
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: 8c1f6f30-2e86-4771-a6ae-5fd760eb3c40
+		summarizeBy: none
+		sourceColumn: include_in_p2p_load
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Latest Invoice Rank by Supplier' = ```
+			
+			RANKX (
+			    FILTER (
+			        'Invoice Line',
+			        'Invoice Line'[Supplier ID] = EARLIER ( 'Invoice Line'[Supplier ID] )
+			    ),
+			    'Invoice Line'[Invoice Date],
+			    ,
+			    DESC,
+			    DENSE
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 379016b9-e618-47b1-b3a0-3aee3dcfb5ca
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PO after the fact' = "test"
+		lineageTag: 3df78ae4-f0ca-47d8-8146-09ed3918a0e4
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PO first date' = ```
+			
+			LOOKUPVALUE (
+			    'Purchase Order Line'[Order Date],
+			    'Purchase Order Line'[Order Number], 'Invoice Line'[Order Number],
+			    'Purchase Order Line'[Order Date Rank], 1
+			)
+			
+			```
+		formatString: yyyy-mm-dd
+		lineageTag: c07687da-0991-48c1-a115-c4b8eb98afcd
+		summarizeBy: none
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Invoice after PO' = ```
+			
+			IF (
+			    'Invoice Line'[Invoice Date] >= 'Invoice Line'[PO first date],
+			    "Yes",
+			    "No"
+			)
+			
+			```
+		lineageTag: 0d45a751-05d1-4b58-8929-d3120fbca90f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier has content in iShop' = ```
+			
+			IF (
+			    'Invoice Line'[Source] = "SAP (CORE)",
+			    "Not Applicable",
+			    IF (
+			        ISBLANK (
+			            LOOKUPVALUE (
+			                'Supplier Details'[iShopContent],
+			                'Supplier Details'[Supplier ID], 'Invoice Line'[Supplier ID],
+			                'Supplier Details'[Ordering Country  Code], 'Invoice Line'[country_code]
+			            )
+			        ),
+			        "No",
+			        LOOKUPVALUE (
+			            'Supplier Details'[iShopContent],
+			            'Supplier Details'[Supplier ID], 'Invoice Line'[Supplier ID],
+			            'Supplier Details'[Ordering Country  Code], 'Invoice Line'[country_code]
+			        )
+			    )
+			)
+			
+			```
+		lineageTag: 8bde9c96-4cca-4b2c-a43d-39923c76535c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PO number format check' = ```
+			
+			IF (
+			    LEN ( 'Invoice Line'[Order Number] ) <> 10,
+			    "Incorrect",
+			    IF ( LEFT ( 'Invoice Line'[Order Number], 1 ) <> "2", "Incorrect", "Correct" )
+			)
+			
+			```
+		lineageTag: cd114cb9-ed07-4efa-843f-1127e3bfb21b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Non PO compliance group' = ```
+			
+			SWITCH (
+			    TRUE (),
+			    'Invoice Line'[Compliance] = "Purchase Order Compliant", "PO compliant",
+			    'Invoice Line'[Compliance] <> "Purchase Order Compliant"
+			        && 'Invoice Line'[Order Number] = "None", "No Order Number",
+			    'Invoice Line'[Compliance] = "Basware Contract Compliant", "Basware Contract Compliant",
+			    'Invoice Line'[Compliance] <> "Purchase Order Compliant"
+			        && 'Invoice Line'[PO number format check] = "Incorrect", "Incorrect Order number format",
+			    'Invoice Line'[Compliance] <> "Purchase Order Compliant"
+			        && 'Invoice Line'[Match Status] = "3", "Order for invoice not found",
+			    "Other"
+			)
+			
+			```
+		lineageTag: 476208bd-90e7-421f-9f70-dd6db9b1ad5b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column legal_unit_full_name
+		dataType: string
+		lineageTag: b9952913-f154-4fbd-8ebc-cdbc68201ddb
+		summarizeBy: none
+		sourceColumn: legal_unit_full_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column legal_unit_id
+		dataType: string
+		lineageTag: 6cebbfc2-40f0-40d1-a00c-f0b41ffda1ca
+		summarizeBy: none
+		sourceColumn: legal_unit_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column '30 Due date' = 'Invoice Line'[Entry Date]+30
+		formatString: General Date
+		lineageTag: c0f9df2f-8b47-4b33-90d7-f024b37d1b2b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column '30 Has payment on time' = ```
+			
+			SWITCH (
+			    TRUE (),
+			    'Invoice Line'[Invoice Payment Date] < 1, "No",
+			    'Invoice Line'[Invoice Payment Date] <= 'Invoice Line'[30 Due date], "Yes",
+			    "No"
+			)
+			
+			```
+		lineageTag: b1e50321-5b9a-412b-93f5-52180f0abbed
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Key Supplier ID-Order country' = ```
+			
+			CONCATENATE ( 'Invoice Line'[Supplier ID], 'Invoice Line'[country_code] )
+			
+			```
+		lineageTag: 64d10e8f-9121-4fcd-9f03-e05f83ea5227
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Key inv' = ```
+			
+			CONCATENATE (
+			    CONCATENATE ( 'Invoice Line'[Supplier ID], 'Invoice Line'[country_code] ),
+			    'Invoice Line'[GL Account Number]
+			)
+			
+			```
+		lineageTag: 919de366-4182-4340-b364-dde9daf5c911
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_item_text
+		dataType: string
+		lineageTag: 99e65bf6-948d-4223-bd0f-65341ef3cb8d
+		summarizeBy: none
+		sourceColumn: invoice_item_text
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_system
+		dataType: string
+		lineageTag: e25ebfe6-3649-4815-b76f-5edf53c05f66
+		summarizeBy: none
+		sourceColumn: source_system
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscal_year_name
+		dataType: string
+		lineageTag: fa161438-5794-4705-b1ce-26ec5af1a411
+		summarizeBy: none
+		sourceColumn: fiscal_year_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Has Payment on Time'
+		dataType: string
+		lineageTag: cdde15f2-d01f-42f0-a7e1-a75ae3d46959
+		summarizeBy: none
+		sourceColumn: Has Payment on Time
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'BU Code'
+		dataType: string
+		lineageTag: 5d7b6c21-9a94-44d6-b6cb-24e36a788df1
+		summarizeBy: none
+		sourceColumn: BU Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier ID'
+		dataType: string
+		lineageTag: 9416ba70-913b-4afb-848e-290bbc72628e
+		summarizeBy: none
+		sourceColumn: Supplier ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column includesupplier
+		dataType: string
+		lineageTag: 51434b99-5c6e-4150-b6e6-0d8e1ab96618
+		summarizeBy: none
+		sourceColumn: includesupplier
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Invoice recieving solution'
+		dataType: string
+		lineageTag: 57f3b56a-79e8-4a48-847b-224c1cadcb56
+		summarizeBy: none
+		sourceColumn: Invoice recieving solution
+
+		annotation SummarizationSetBy = Automatic
+
+	column pre_link
+		dataType: string
+		isHidden
+		lineageTag: 95961177-6660-4fc5-8ae8-acd82003f35f
+		summarizeBy: none
+		sourceColumn: pre_link
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column match
+		dataType: string
+		lineageTag: a39377b1-5c8f-43de-9b73-ac9dde1e956a
+		summarizeBy: none
+		sourceColumn: match
+
+		annotation SummarizationSetBy = Automatic
+
+	column compliance
+		dataType: string
+		lineageTag: 687178fe-72bd-49a4-aeaa-5989ea4919c4
+		summarizeBy: none
+		sourceColumn: compliance
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoiceformat
+		dataType: string
+		lineageTag: 0dbc8303-e1c5-4dc1-84b3-ff4eb8fd12ab
+		summarizeBy: none
+		sourceColumn: invoiceformat
+
+		annotation SummarizationSetBy = Automatic
+
+	column legal_unit_code
+		dataType: string
+		lineageTag: 1f5cfcd2-8493-4535-9716-05aea67b41f8
+		summarizeBy: none
+		sourceColumn: legal_unit_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column profit_centre
+		dataType: int64
+		formatString: 0
+		lineageTag: 4fa7f833-a30e-4e0e-a09a-8af1684bc7f0
+		summarizeBy: sum
+		sourceColumn: profit_centre
+
+		annotation SummarizationSetBy = Automatic
+
+	column profit_centre_name
+		dataType: string
+		lineageTag: 6cd5e131-c095-4ceb-a253-635bebbc1558
+		summarizeBy: none
+		sourceColumn: profit_centre_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Include_in_adjusted_KPI
+		dataType: string
+		lineageTag: 39c3dded-2224-499c-9d41-3bffdb25ae3a
+		summarizeBy: none
+		sourceColumn: Include_in_adjusted_KPI
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_id
+		dataType: string
+		lineageTag: bee282c3-9601-4438-b228-3e9dc13f652b
+		summarizeBy: none
+		sourceColumn: invoice_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column global_GL_no
+		dataType: string
+		lineageTag: 70d924d4-cfea-4448-8881-3841ac046d9e
+		summarizeBy: none
+		sourceColumn: global_GL_no
+
+		annotation SummarizationSetBy = Automatic
+
+	column ELEMENT_5
+		dataType: string
+		lineageTag: 2fd4fd02-52a0-46da-9cec-b51e1fd6ba9b
+		summarizeBy: none
+		sourceColumn: ELEMENT_5
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Has sending system'
+		dataType: string
+		lineageTag: a6ed6046-465d-49f8-b752-6585b4a01aa1
+		summarizeBy: none
+		sourceColumn: Has sending system
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_quantity
+		dataType: string
+		lineageTag: a1367fb0-f28e-47b4-bfd2-6612cedb4a48
+		summarizeBy: none
+		sourceColumn: invoice_quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_quantity_formatted
+		dataType: string
+		lineageTag: a1160cce-ff73-4e1d-9ff7-6ac945ea47ee
+		summarizeBy: none
+		sourceColumn: invoice_quantity_formatted
+
+		annotation SummarizationSetBy = Automatic
+
+	column split_accountings_quantity
+		dataType: string
+		lineageTag: 5440319e-3939-4624-bc74-c5a76d63f85a
+		summarizeBy: none
+		sourceColumn: split_accountings_quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column UOM
+		dataType: string
+		lineageTag: 5a94bf47-7c81-4a3d-b670-b1f20b0ba2a6
+		summarizeBy: none
+		sourceColumn: UOM
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_line_number
+		dataType: string
+		lineageTag: 738c0aca-3e34-4ac0-b570-f1ade2a675b8
+		summarizeBy: none
+		sourceColumn: order_line_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column link
+		dataType: string
+		lineageTag: eb5c0658-b179-4e54-b1cb-344d28a62f89
+		summarizeBy: none
+		sourceColumn: link
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Company Function Code'
+		dataType: string
+		lineageTag: f26f3b82-dd07-4ebe-8ddd-d8c28ac8d004
+		summarizeBy: none
+		sourceColumn: Company Function Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Source
+		dataType: string
+		lineageTag: 6b18fe58-a207-493b-b55a-0041033d4fc6
+		summarizeBy: none
+		sourceColumn: Source
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rolling_12M_Flag = ```
+			
+			VAR MaxDate = CALCULATE(MAX('Invoice Line'[Transfer Date]), ALL('Invoice Line'))  -- Latest available date in dataset
+			VAR LastFullMonthEnd = EOMONTH(MaxDate, -1)  -- End of last fully completed month
+			VAR MinDate = DATE(YEAR(LastFullMonthEnd), MONTH(LastFullMonthEnd) - 11, 1)  -- First day of the 12th month back
+			
+			RETURN 
+			    IF(
+			        'Invoice Line'[Transfer Date] >= MinDate && 'Invoice Line'[Transfer Date] <= LastFullMonthEnd, 
+			        "R12 Full Months", 
+			        "NA"
+			    )
+			```
+		displayFolder: .Measures
+		lineageTag: c020709e-94fa-43ab-9089-a2c746df4dd9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Invoice Line-5ea6b23f-3d06-438d-ac2d-3f347928aed9' = m
+		mode: import
+		queryGroup: '4-Load to Model'
+		source = ```
+				let 
+				    
+				    Source = GCP_dataform_procBi_datamart,
+				    Data = Source{[Name="invoice_fct_vw",Kind="View"]}[Data],
+				    FilteredRows = Table.SelectRows(Data, each ([included_in_gl_account] = true) and ([include_in_p2p_load] = "Yes") and ([includesupplier] = "Yes")),
+				    FilteredRows_Incremental = Table.SelectRows(FilteredRows, each [transfer_date] > RangeStart and [transfer_date] <= RangeEnd),
+				    RenamedColumns = Table.RenameColumns(FilteredRows_Incremental,{{"payment_group", "Payment Group"}, {"payment_terms", "Payment Terms"}, {"pay_on_time", "Has Payment on Time"}, {"bu_code", "BU Code"}, {"supplier_id", "Supplier ID"}, {"order_no", "Order Number"}, {"source_contract_no", "Source Contract Number"}, {"transfer_date", "Transfer Date"}, {"gl_account_no", "GL Account Number"}, {"invoice_line_no", "Invoice Line Number"}, {"invoice_reference_id", "Invoice Reference ID"}, {"vendor_invoice_no", "Supplier Invoice Number"}, {"has_valid_contract", "Has Valid Contract"}, {"included_in_gl_account", "Has GL Account"}, {"currency_code", "Currency Code"}, {"match_status", "Match Status"}, {"due_date", "Due Date"}, {"entry_date", "Entry Date"}, {"invoice_payment_date", "Invoice Payment Date"}, {"invoice_date", "Invoice Date"}, {"attrib_t5", "Invoice recieving solution"}, {"t2", "Company Function Code"}}),
+				    AddColumn = Table.AddColumn(RenamedColumns, "custom", each if [source_system] = "Legacy" then [link] else "Not Available", type text),
+				    RenamedColumns1 = Table.RenameColumns(AddColumn,{{"link", "pre_link"}, {"custom", "link"}, {"has_sending_system", "Has sending system"}}),
+				    ChangedType = Table.TransformColumnTypes(RenamedColumns1,{{"Transfer Date", type date}, {"Invoice Payment Date", type date}}),
+				    AddColumn_Source = Table.AddColumn(ChangedType, "Source", each if [source_system] = "Legacy" then "Legacy" else if [source_system] = "SAP(PBC)" then "SAP(PBC)" else "SAP (CORE)", type text)
+				in
+				    AddColumn_Source
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

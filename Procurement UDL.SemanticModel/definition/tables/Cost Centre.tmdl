@@ -1,0 +1,40 @@
+table 'Cost Centre'
+	lineageTag: 58286c10-1d38-4319-a296-b66e4cf28a4b
+
+	measure 'No. of cost centers' =
+			
+			COUNTROWS ( 'Cost Centre' )
+		formatString: 0
+		lineageTag: 7569dc41-2a81-4e02-b088-0114cdaeee0d
+
+		changedProperty = IsHidden
+
+	column 'Cost Center Code'
+		dataType: string
+		lineageTag: 9f08f4ad-0304-4430-a202-d113be92e5ca
+		summarizeBy: none
+		sourceColumn: Cost Center Code
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Cost Centre-0bfe0306-806a-4747-96cd-7276063f4af4' = m
+		mode: import
+		queryGroup: '4-Load to Model'
+		source = ```
+				let 
+				
+				    Source = GCP_dataform_procBi_datamart,
+				    Data = Source{[Name="invoice_fct_vw",Kind="View"]}[Data],
+				    FilteredRows = Table.SelectRows(Data, each ([included_in_gl_account] = true) and ([include_in_p2p_load] = "Yes") and ([includesupplier] = "Yes")),
+				    RemovedOtherColumns = Table.SelectColumns(FilteredRows,{"cost_centre_code"}),
+				    RemovedDuplicates = Table.Distinct(RemovedOtherColumns),
+				    FilteredRows1 = Table.SelectRows(RemovedDuplicates, each ([cost_centre_code] <> null)),
+				    RenamedColumns = Table.RenameColumns(FilteredRows1,{{"cost_centre_code", "Cost Center Code"}})
+				in
+				    RenamedColumns
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

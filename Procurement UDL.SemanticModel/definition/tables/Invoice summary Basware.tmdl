@@ -1,0 +1,466 @@
+table 'Invoice summary Basware'
+	isHidden
+	lineageTag: 6a450add-2a48-4e3b-a4d6-5a6c32c96e6d
+
+	measure '% E-invoices' = ```
+			
+			   CALCULATE(
+			     DIVIDE(
+			        CALCULATE(
+			        'Invoice summary Basware'[Number of invoices], 
+			        'Invoice summary Basware'[InvoiceFormat] = "E-invoice"
+			        ),
+			    'Invoice summary Basware'[Number of invoices]),
+			KEEPFILTERS('Invoice summary Basware'))
+			```
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		isHidden
+		lineageTag: 16b95476-e511-485e-b342-d5d3623ab715
+
+		changedProperty = FormatString
+
+	measure 'Number of invoices' = DISTINCTCOUNT('Invoice summary Basware'[Invoice Reference ID])
+		formatString: 0
+		isHidden
+		lineageTag: 672ede5d-b27f-4ccb-9986-ae0a4adb8119
+
+	measure '% Paper invoices' = ```
+			
+			   CALCULATE(
+			        DIVIDE(
+			            CALCULATE(
+			            'Invoice summary Basware'[Number of invoices], 
+			            'Invoice summary Basware'[InvoiceFormat] = "Paper invoice"
+			        ),
+			    'Invoice summary Basware'[Number of invoices]),
+			KEEPFILTERS('Invoice summary Basware')
+			   )
+			```
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		isHidden
+		lineageTag: 0de7ee3c-6ac9-4eaf-9cbe-eef5f9a8921c
+
+		changedProperty = FormatString
+
+	measure '% PDF invoices' = ```
+			
+			CALCULATE(   
+			  DIVIDE(
+			         CALCULATE(
+			         'Invoice summary Basware'[Number of invoices], 
+			         'Invoice summary Basware'[InvoiceFormat] = "PDF invoice"
+			         ),
+			    'Invoice summary Basware'[Number of invoices]
+			    ),
+			KEEPFILTERS('Invoice summary Basware'))
+			```
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		isHidden
+		lineageTag: ca761fee-cd10-43f1-b6f1-0700aa91b812
+
+		changedProperty = FormatString
+
+	measure 'Average no of days Entry date to transfer date' = ```
+			
+			    AVERAGE('Invoice summary Basware'[Number of days entry to transfer date]
+			    )
+			```
+		isHidden
+		lineageTag: 96d9e96a-f27e-469a-9c26-f4933ac6a8d2
+
+	measure 'Average no of days Invoice date to Entry date' = ```
+			
+			    AVERAGE('Invoice summary Basware'[number of days Invoice date to Entry date]
+			    )
+			```
+		isHidden
+		lineageTag: b12f1820-5b8f-4eac-bbae-668ffec92922
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average no of days PO date to invoice date' = ```
+			
+			    AVERAGE('Invoice summary Basware'[number of days order date to invoice date]
+			    )
+			```
+		isHidden
+		lineageTag: 6f2448f1-1a46-47d7-ae8e-76e5014fe47b
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Number of duplicate invoices' = ```
+			
+			    calculate(
+			        DISTINCTCOUNT('Invoice summary Basware'[Invoice Reference ID]),
+			        'Invoice summary Basware'[Match Status] = "7"
+			    )
+			```
+		formatString: 0
+		isHidden
+		lineageTag: 4d13df1b-6201-412f-b0ac-9f2eca5a581d
+
+	measure 'Number of PO:s' = ```
+			
+			        CALCULATE(
+			            DISTINCTCOUNT('Invoice summary Basware'[Order Number]),
+			                'Invoice summary Basware'[Order Number]<>"None")
+			```
+		formatString: 0
+		isHidden
+		lineageTag: 124101b8-d45b-4030-b199-5e6ee20e4ef6
+
+	measure PO_Compliance =
+			
+			VAR CompliantInvoices =
+			    CALCULATE (
+			        'Invoice summary Basware'[Number of invoices],
+			        KEEPFILTERS ( 'Invoice summary Basware'[Compliance] = "Purchase Order Compliant" )
+			    )
+			RETURN
+			    DIVIDE (
+			        IF ( ISBLANK ( CompliantInvoices ), 0, CompliantInvoices ),
+			        'Invoice summary Basware'[Number of invoices]
+			    )
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		isHidden
+		lineageTag: 8030be9a-155a-4996-9bbb-1a882a42c544
+
+		changedProperty = FormatString
+
+	measure sf_invoicelines2 =
+			
+			INT ( NOT ISEMPTY ( 'Invoice summary Basware' ) )
+		formatString: 0
+		isHidden
+		lineageTag: e9356bc8-495c-4970-960d-84c506738184
+
+	measure 'Tot Invoiced Amount EUR' =
+			
+			SUM ( 'Invoice summary Basware'[Invoiced amount (EUR)] )
+		isHidden
+		lineageTag: 4b087c55-a30c-4b69-8383-2f8e2a925c85
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average no of days Transfer date to Payment date' = ```
+			
+			    AVERAGE('Invoice summary Basware'[Number of days transfer to payment date]
+			    )
+			```
+		isHidden
+		lineageTag: 80f36e94-34ac-495b-a60c-34f3729be7b3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average no of days total' = [Average no of days Invoice date to Entry date]+[Average no of days Entry date to transfer date]+[Average no of days Transfer date to Payment date]
+		isHidden
+		lineageTag: 806df39b-6c7b-4d9c-a9b4-eef26be3fabc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Invoice Reference ID'
+		isHidden
+		lineageTag: da3f137c-f907-4e0a-a485-c4260912d289
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[Invoice Reference ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Number'
+		isHidden
+		lineageTag: 8a84da46-34b2-4854-866d-a30abdc285eb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[Order Number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency Code'
+		isHidden
+		lineageTag: 4d185ceb-a172-496e-8253-4f883e8e7ed1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[Currency Code]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Match Status'
+		isHidden
+		lineageTag: ea37eccb-bdcb-4557-874d-72b7aaff7436
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[Match Status]
+
+		annotation SummarizationSetBy = Automatic
+
+	column match
+		isHidden
+		lineageTag: 77f43972-1df2-482b-a0a1-a42f933c5bb9
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[Match]
+
+		annotation SummarizationSetBy = Automatic
+
+	column compliance
+		isHidden
+		lineageTag: a239165e-d4e7-4303-a1ea-54bc0cacb3e7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[Compliance]
+
+		annotation SummarizationSetBy = Automatic
+
+	column country_code
+		isHidden
+		lineageTag: 96ae2006-50cb-443c-8a46-253179ba4c88
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[country_code]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier ID'
+		isHidden
+		lineageTag: 8febfa43-efa4-4e30-8ed7-6000161adfac
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[Supplier ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoiceformat
+		isHidden
+		lineageTag: c30623a1-6bc1-4933-8c7a-9068874a0748
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[InvoiceFormat]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Has Payment on Time'
+		isHidden
+		lineageTag: a122af7a-1e76-4cde-a440-07aef038be49
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[Has Payment on Time]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Invoiced amount (original currency)'
+		isHidden
+		lineageTag: db945cec-16ec-405a-b80e-2689da339eb9
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Invoiced amount (original currency)]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Invoiced amount (EUR)'
+		isHidden
+		lineageTag: 174cfa2b-db55-497e-84f4-a89dfc5202a9
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Invoiced amount (EUR)]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Transfer date'
+		isHidden
+		formatString: Long Date
+		lineageTag: cf3e456d-a2ae-4653-ac7c-66447f035d5c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Transfer date]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Payment date'
+		isHidden
+		formatString: General Date
+		lineageTag: 303d7c97-56e1-408c-a33b-6e2444661efb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Payment date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Entry date'
+		isHidden
+		formatString: General Date
+		lineageTag: f9f4aae3-08ba-4e3b-9b59-affc13702c63
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Entry date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Invoice date'
+		isHidden
+		formatString: General Date
+		lineageTag: c091a2eb-c107-4166-b800-ae3cb9a4ee9f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Invoice date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Number of days entry to transfer date' = DATEDIFF('Invoice summary Basware'[Entry date], 'Invoice summary Basware'[Transfer date],DAY)
+		isHidden
+		formatString: 0
+		lineageTag: ff432139-022d-45ea-b59a-f5ab01646763
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Number of days Invoice date to Entry date' = DATEDIFF('Invoice summary Basware'[Invoice date], 'Invoice summary Basware'[Entry date],DAY)
+		isHidden
+		formatString: 0
+		lineageTag: ce7cf3e5-703f-4053-95b3-490615991083
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Number of days order date to invoice date' = ```
+			
+			/*
+			DATEDIFF (
+			    'Invoice summary Basware'[Order date],
+			    'Invoice summary Basware'[Invoice date],
+			    DAY
+			)
+			*/
+			
+			```
+		isHidden
+		formatString: 0
+		lineageTag: c9e94061-663e-4ead-9711-2451df22074a
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order date' = ```
+			
+			/*
+			RELATED ( 'PO summary iShop'[Latest order date] )
+			*/
+			
+			```
+		isHidden
+		formatString: 0
+		lineageTag: 8439fe1c-a31a-4f75-b9fd-66e8a07927e5
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier name' = LOOKUPVALUE(Supplier[Supplier Name],Supplier[Supplier ID],'Invoice summary Basware'[Supplier ID])
+		isHidden
+		lineageTag: ca0f0075-826c-4223-b3ed-22744f4fc52d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier in iShop for invoiced country' = LOOKUPVALUE('Supplier Details'[iShopContent],'Supplier Details'[Supplier ID],'Invoice summary Basware'[Supplier ID],'Supplier Details'[Ordering Country  Code],'Invoice summary Basware'[country_code])
+		isHidden
+		lineageTag: 8b6db6db-a9c9-409d-a6a7-5c83131052a3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Non PO compliance check' =
+			SWITCH(
+			    TRUE(),
+			    'Invoice summary Basware'[Compliance] = "Purchase Order Compliant", "PO compliant",
+			    'Invoice summary Basware'[Compliance] <> "Purchase Order Compliant" && 'Invoice summary Basware'[Order Number] ="None", "No Order Number",
+			    'Invoice summary Basware'[Compliance] = "Basware Contract Compliant", "Basware Contract Compliant",
+			    'Invoice summary Basware'[Compliance] <> "Purchase Order Compliant" && 'Invoice summary Basware'[Order Number format check] ="Incorrect", "Incorrect Order number format",
+			    'Invoice summary Basware'[Compliance] <> "Purchase Order Compliant" && 'Invoice summary Basware'[Match Status] ="3", "Order for invoice not found",
+			"Other"
+			
+			)
+		isHidden
+		lineageTag: 6fac527c-1750-4110-ad50-3607e711e724
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Number format check' = ```
+			
+			    IF(
+			        LEN('Invoice summary Basware'[Order Number])<>10, 
+			        "Incorrect", 
+			
+			     IF(
+			        LEFT('Invoice summary Basware'[Order Number], 2)<> "21",
+			        "Incorrect",
+			        "Correct" ))
+			```
+		isHidden
+		lineageTag: 0af1d642-c816-468e-85d0-2355a9735f44
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Payment Terms'
+		isHidden
+		lineageTag: 7883bd18-4684-409a-b100-6c7fe972a038
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[Payment Terms]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Number of days transfer to payment date' = DATEDIFF('Invoice summary Basware'[Transfer date], 'Invoice summary Basware'[Payment date],DAY)
+		isHidden
+		formatString: 0
+		lineageTag: 7f7e6e2b-7b0d-4ab7-85a5-659f72c8379c
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Source
+		isHidden
+		lineageTag: 30f52233-f59f-43f0-bc57-a4e1f73dc6d9
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[Source]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Invoice summary Basware-632a5071-2170-4a00-8f6b-43581bb380b6' = calculated
+		mode: import
+		source = ```
+				
+				CALCULATETABLE(    SUMMARIZECOLUMNS(
+				'Invoice Line'[Invoice Reference ID], 
+				'Invoice Line'[Order Number],
+				'Invoice Line'[Currency Code], 
+				'Invoice Line'[Match Status],
+				'Invoice Line'[Match],
+				'Invoice Line'[Compliance],
+				'Invoice Line'[country_code],
+				'Invoice Line'[Supplier ID],
+				'Invoice Line'[InvoiceFormat],
+				'Invoice Line'[Has Payment on Time],
+				'Invoice Line'[Payment Terms],
+				'Invoice Line'[Source],
+				"Invoiced amount (original currency)",  SUM ('Invoice Line'[net_amount]), 
+				"Invoiced amount (EUR)", SUM('Invoice Line'[net_amount_eur]),
+				"Transfer date",   MAX('Invoice Line'[Transfer Date]),
+				"Payment date", max('Invoice Line'[Invoice Payment Date]),
+				"Entry date", max('Invoice Line'[Entry Date]),
+				"Invoice date", max('Invoice Line'[Invoice Date])
+				),'GL account'[Spend Group 1]<> "Service Business")
+				```
+
+	annotation PBI_Id = 348cde97cf1b4690bf82bbbd4c654621
+

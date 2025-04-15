@@ -1,0 +1,209 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/1.2.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY20SU09",
+      "reportVersionAtImport": "5.16",
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "theme_created_by_powerbi.tips_6751647222667747.json",
+      "reportVersionAtImport": "5.18",
+      "type": "RegisteredResources"
+    }
+  },
+  "layoutOptimization": "None",
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "3077da1d062b29ff676b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Date"
+              }
+            },
+            "Property": "FY Year"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "Date",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "d"
+                          }
+                        },
+                        "Property": "FY Year"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'FY22'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'FY23'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'FY24'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'FY25'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User"
+      }
+    ]
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "publicCustomVisuals": [
+    "paretoEDD8E69761BA4B7BB3AA6D813990D7BF",
+    "FilterByList507A2DBEC31244C8AAABDE9BA541F723"
+  ],
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY20SU09",
+          "path": "BaseThemes/CY20SU09.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "theme_created_by_powerbi.tips_6751647222667747.json",
+          "path": "theme_created_by_powerbi.tips_6751647222667747.json",
+          "type": "CustomTheme"
+        }
+      ]
+    },
+    {
+      "name": "PBI_CV_7B952816_A48F_49B4_9E13_15E3BB2C0337",
+      "type": "CustomVisual",
+      "items": [
+        {
+          "name": "PBI_CV_7B952816_A48F_49B4_9E13_15E3BB2C0337.pbiviz.json",
+          "path": "PBI_CV_7B952816_A48F_49B4_9E13_15E3BB2C0337.pbiviz.json",
+          "type": "CustomVisualMetadata"
+        }
+      ]
+    },
+    {
+      "name": "advanceCardE03760C5AB684758B56AA29F9E6C257B",
+      "type": "CustomVisual",
+      "items": [
+        {
+          "name": "advanceCardE03760C5AB684758B56AA29F9E6C257B.pbiviz.json",
+          "path": "advanceCardE03760C5AB684758B56AA29F9E6C257B.pbiviz.json",
+          "type": "CustomVisualMetadata"
+        }
+      ]
+    },
+    {
+      "name": "powerKPI462CE5C2666F4EC8A8BDD7E5587320A3",
+      "type": "CustomVisual",
+      "items": [
+        {
+          "name": "powerKPI462CE5C2666F4EC8A8BDD7E5587320A3.pbiviz.json",
+          "path": "powerKPI462CE5C2666F4EC8A8BDD7E5587320A3.pbiviz.json",
+          "type": "CustomVisualMetadata"
+        }
+      ]
+    },
+    {
+      "name": "paretoEDD8E69761BA4B7BB3AA6D813990D7BF",
+      "type": "CustomVisual",
+      "items": [
+        {
+          "name": "paretoEDD8E69761BA4B7BB3AA6D813990D7BF.pbiviz.json",
+          "path": "paretoEDD8E69761BA4B7BB3AA6D813990D7BF.pbiviz.json",
+          "type": "CustomVisualMetadata"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "allowInlineExploration": true,
+    "useEnhancedTooltips": true
+  },
+  "slowDataSourceSettings": {
+    "isCrossHighlightingDisabled": false,
+    "isSlicerSelectionsButtonEnabled": false,
+    "isFilterSelectionsButtonEnabled": false,
+    "isFieldWellButtonEnabled": false,
+    "isApplyAllButtonEnabled": false
+  }
+}

@@ -1,0 +1,103 @@
+table 'GL account'
+	lineageTag: 71b85584-067e-4912-a442-7a75bcb2f8ba
+
+	measure 'No. of GL accounts' =
+			
+			COUNTROWS ( 'GL account' )
+		formatString: 0
+		lineageTag: b805165a-c5b5-4d6a-bad9-32c833ca1469
+
+		changedProperty = IsHidden
+
+	column 'Spend Group 1'
+		dataType: string
+		lineageTag: fad4da93-2405-44f0-b3f2-e938c1a76cd5
+		summarizeBy: none
+		sourceColumn: Spend Group 1
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Spend Group 2'
+		dataType: string
+		lineageTag: 3285d00a-2cfa-4308-a9fc-82766d082a13
+		summarizeBy: none
+		sourceColumn: Spend Group 2
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'SB filter' = ```
+			
+			SWITCH (
+			    TRUE (),
+			    'GL account'[Spend Group 1] = "Product related services",
+			        "Spend group 1 Product related services, Cost of goods sold and Other Out of Scope",
+			    'GL account'[Spend Group 1] = "Cost of goods sold",
+			        "Spend group 1 Product related services, Cost of goods sold and Other Out of Scope",
+			    'GL account'[Spend Group 1] = "Other Out of Scope",
+			        "Spend group 1 Product related services, Cost of goods sold and Other Out of Scope",
+			    'GL account'[Spend Group 1] <> "Product related services",
+			        "Spend group 1 excl. Product related services, Cost of goods sold and Other Out of Scope",
+			    'GL account'[Spend Group 1] <> "Cost of good sold",
+			        "Spend group 1 excl. Product related services, Cost of goods sold and Other Out of Scope",
+			    'GL account'[Spend Group 1] <> "Other Out of Scope",
+			        "Spend group 1 excl. Product related services, Cost of goods sold and Other Out of Scope",
+			    "N/A"
+			)
+			
+			```
+		lineageTag: 74eb4d82-2f59-44f6-9770-716a3f2969a3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'GL Account Number'
+		dataType: string
+		lineageTag: f454d9d6-9a51-4bbd-b8c7-5754f30dcbef
+		summarizeBy: none
+		sourceColumn: GL Account Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'GL Account Name'
+		dataType: string
+		lineageTag: 9a0778e1-729a-4df0-bdcf-bace3f1f06cb
+		summarizeBy: none
+		sourceColumn: GL Account Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Legacy_GL_No
+		dataType: string
+		lineageTag: ffcb396c-6943-4cf9-b132-f3ec5f1240bc
+		summarizeBy: none
+		sourceColumn: Legacy_GL_No
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Bookmark
+		dataType: string
+		lineageTag: 88d83e67-6a3d-400e-a306-ba0a70c01558
+		summarizeBy: none
+		sourceColumn: Bookmark
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'GL account-ed6280ff-e7c1-4bf4-91f7-47256c5451d8' = m
+		mode: import
+		queryGroup: '4-Load to Model'
+		source =
+				let
+				
+				    Source = GCP_dataform_p2p_datamart,
+				    Data = Source{[Name="gl_account_master_vw",Kind="View"]}[Data],
+				    RenamedColumns = Table.RenameColumns(Data,{{"GLOBAL_GL_Name", "GL Account Name"}, {"global_GL_no", "GL Account Number"}, {"spend_group_l1", "Spend Group 1"}, {"spend_group_l2", "Spend Group 2"}}),
+				    ChangedType = Table.TransformColumnTypes(RenamedColumns,{{"GL Account Number", type text}})
+				in
+				    ChangedType
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

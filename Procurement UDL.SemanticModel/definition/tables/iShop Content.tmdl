@@ -1,0 +1,205 @@
+table 'iShop Content'
+	lineageTag: 5435ab30-e39d-4ae2-b5cc-7812048c30bb
+
+	column ViewName
+		dataType: string
+		lineageTag: 4918c8d7-d459-4846-9fb9-2424c4a3ecc9
+		summarizeBy: none
+		sourceColumn: ViewName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryCode
+		dataType: string
+		lineageTag: 443338d8-abbd-4c55-b883-bc541a2820bf
+		summarizeBy: none
+		sourceColumn: CountryCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column VendorName
+		dataType: string
+		lineageTag: dd133bea-9322-4fa4-a3a7-855c45b60ee5
+		summarizeBy: none
+		sourceColumn: VendorName
+
+		annotation SummarizationSetBy = Automatic
+
+	column VendorId
+		dataType: string
+		lineageTag: 577026e2-a63a-4144-9e5a-4bcb1d269e70
+		summarizeBy: none
+		sourceColumn: VendorId
+
+		annotation SummarizationSetBy = Automatic
+
+	column CatalogId
+		dataType: string
+		lineageTag: 895c33a3-7d89-4fc3-844c-7a4da4dabc27
+		summarizeBy: none
+		sourceColumn: CatalogId
+
+		annotation SummarizationSetBy = Automatic
+
+	column CatalogName
+		dataType: string
+		lineageTag: e039db42-bc0f-47e4-8fea-d5af9249ddc0
+		summarizeBy: none
+		sourceColumn: CatalogName
+
+		annotation SummarizationSetBy = Automatic
+
+	column VendorProductNo
+		dataType: string
+		lineageTag: dcdc1249-21f5-47a7-8d3e-14d6fd882bc5
+		summarizeBy: none
+		sourceColumn: VendorProductNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: 8c4b35c0-81ca-4dc8-8fba-55bd8fc25436
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductDescription
+		dataType: string
+		lineageTag: 3b5aea77-2fef-41a7-9d0b-615680a9f277
+		summarizeBy: none
+		sourceColumn: ProductDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractNumber
+		dataType: string
+		lineageTag: 6ab160b0-ef15-43dd-b9c9-a77e38b38d83
+		summarizeBy: none
+		sourceColumn: ContractNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryLevel1Code
+		dataType: string
+		lineageTag: 014e13e7-0e72-4917-aecd-902ada2e3c88
+		summarizeBy: none
+		sourceColumn: ProductCategoryLevel1Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryLevel1Name
+		dataType: string
+		lineageTag: 425736a6-6aa0-480b-8445-2b909008701f
+		summarizeBy: none
+		sourceColumn: ProductCategoryLevel1Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryLevel2Code
+		dataType: string
+		lineageTag: f55ea17a-8349-478c-8d25-921d28ab8d3b
+		summarizeBy: none
+		sourceColumn: ProductCategoryLevel2Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryLevel2Name
+		dataType: string
+		lineageTag: a5415794-889e-4552-9917-4e790a024ca4
+		summarizeBy: none
+		sourceColumn: ProductCategoryLevel2Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryLevel3Code
+		dataType: string
+		lineageTag: f545dce4-dd5e-4ace-b7fb-09eabafdb979
+		summarizeBy: none
+		sourceColumn: ProductCategoryLevel3Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryLevel3Name
+		dataType: string
+		lineageTag: 5fbc9a6b-d9b8-4143-ab4c-2df11bfc5a9c
+		summarizeBy: none
+		sourceColumn: ProductCategoryLevel3Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryLevel4Code
+		dataType: string
+		lineageTag: 6363cb45-587a-4acd-abf0-d542aa8e07ea
+		summarizeBy: none
+		sourceColumn: ProductCategoryLevel4Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategoryLevel4Name
+		dataType: string
+		lineageTag: 21644510-aa98-494d-a609-450621e859d4
+		summarizeBy: none
+		sourceColumn: ProductCategoryLevel4Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column GLAccount
+		dataType: string
+		lineageTag: baaaa919-9478-4549-8fe5-2f888f085543
+		summarizeBy: none
+		sourceColumn: GLAccount
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: string
+		lineageTag: 6f10dda9-3414-467d-9e74-1f3badedd224
+		summarizeBy: none
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyCode
+		dataType: string
+		lineageTag: 3f0d0360-24b8-4ce9-bfbe-40721c5073db
+		summarizeBy: none
+		sourceColumn: CurrencyCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column CatalogApprover
+		dataType: string
+		lineageTag: d029f36a-763c-41ef-b937-3526bba73dc9
+		summarizeBy: none
+		sourceColumn: CatalogApprover
+
+		annotation SummarizationSetBy = Automatic
+
+	column bq_ins_dtm
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0c3984dc-8ab9-4cde-b40e-38e747aee83a
+		summarizeBy: none
+		sourceColumn: bq_ins_dtm
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'iShop Content-c8f480a3-5a39-4222-b361-9444a0ee4360' = m
+		mode: import
+		queryGroup: '4-Load to Model'
+		source = ```
+				let
+				    
+				    Source = GCP_dataform_p2p_datamart,
+				    Data = Source{[Name="ishop_content_vw",Kind="View"]}[Data]
+				
+				in
+				    Data
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

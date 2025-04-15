@@ -1,0 +1,172 @@
+table 'Business Unit'
+	lineageTag: dcf824c5-b68d-4270-8efa-7e9be4df615f
+
+	measure 'No. of business units' =
+			
+			COUNTROWS ( 'Business Unit' )
+		formatString: 0
+		lineageTag: 42d53179-72ba-4759-891c-59b1f1fd9a50
+
+	column business_unit_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 18152071-80b3-4af6-86f6-17e79686103d
+		summarizeBy: none
+		sourceColumn: business_unit_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column business_unit_bk
+		dataType: string
+		lineageTag: e6d8b8d9-2f96-411a-8139-608bb7378345
+		summarizeBy: none
+		sourceColumn: business_unit_bk
+
+		annotation SummarizationSetBy = Automatic
+
+	column scd_curr_ind
+		dataType: string
+		lineageTag: 073e9ddb-5b83-42a8-8bfe-e50c8a8ee856
+		summarizeBy: none
+		sourceColumn: scd_curr_ind
+
+		annotation SummarizationSetBy = Automatic
+
+	column ingest_dttm
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: af86d139-8889-4e09-a395-ae8673f3d42c
+		summarizeBy: none
+		sourceColumn: ingest_dttm
+
+		annotation SummarizationSetBy = Automatic
+
+	column business_unit_short_name
+		dataType: string
+		lineageTag: 485783e2-4691-48e7-b455-bc0b8684b9c0
+		summarizeBy: none
+		sourceColumn: business_unit_short_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Business Unit Name'
+		dataType: string
+		lineageTag: c07cef07-628e-4b89-8ebf-2aa5a1ed7925
+		summarizeBy: none
+		sourceColumn: Business Unit Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column business_unit_code
+		dataType: string
+		lineageTag: 2cc49203-6cfa-42a7-9d69-2a42cbbc8daf
+		summarizeBy: none
+		sourceColumn: business_unit_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Business Unit Group'
+		dataType: string
+		lineageTag: 158d27f8-ab6e-411c-b031-50669d4649f5
+		summarizeBy: none
+		sourceColumn: Business Unit Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Business Type'
+		dataType: string
+		lineageTag: 43a33bc5-a38a-4053-9889-69b72483d656
+		summarizeBy: none
+		sourceColumn: Business Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Valid from Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: cbdc986a-1afd-45f7-ae3e-c7ff860ad979
+		summarizeBy: none
+		sourceColumn: Valid from Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Valid to Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d697b453-7993-458a-9097-95cfe7a7deef
+		summarizeBy: none
+		sourceColumn: Valid to Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column externalId
+		dataType: string
+		lineageTag: ff068614-5d01-4ff0-aee7-45e0e03fc57c
+		summarizeBy: none
+		sourceColumn: externalId
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Business Unit ID'
+		dataType: string
+		lineageTag: 365574e1-10b2-40f6-924a-8bc0c4684d2b
+		summarizeBy: none
+		sourceColumn: Business Unit ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Business Unit Code Name'
+		dataType: string
+		lineageTag: af788cc0-c2e2-40b8-ae6e-5223b2eb79aa
+		summarizeBy: none
+		sourceColumn: Business Unit Code Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ingestion_time
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 241cadc2-c776-44cc-b2f7-dac591eed4fd
+		summarizeBy: none
+		sourceColumn: ingestion_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_system
+		dataType: string
+		lineageTag: 439d7068-8de6-4d0b-bf3d-030fdd62d32b
+		summarizeBy: none
+		sourceColumn: source_system
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Business Unit'
+		dataType: string
+		lineageTag: c577a00b-3b08-44cd-bfae-6e34c617432b
+		summarizeBy: none
+		sourceColumn: Business Unit
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Business Unit' = m
+		mode: import
+		queryGroup: '4-Load to Model'
+		source =
+				let
+				
+				    Source = GCP_dataform_p2p_datamart,
+				    Data = Source{[Name="business_unit_pnl_dim_vw",Kind="View"]}[Data],
+				    RenamedColumns = Table.RenameColumns(Data,{{"business_unit_type_name", "Business Unit Group"}, {"business_unit_type", "Business Type"}, {"business_unit_full_name", "Business Unit Name"}, {"business_unit_id", "Business Unit ID"}, {"business_unit_code_name", "Business Unit Code Name"}, {"valid_from_date", "Valid from Date"}, {"valid_to_date", "Valid to Date"}}),
+				    RemovedColumns = Table.RemoveColumns(RenamedColumns,{"scd_start_dttm", "scd_end_dttm", "scd_record_hash"}),
+				    AddColumn_BusinessUnit = Table.AddColumn(RemovedColumns, "Business Unit", each if  Text.Upper([Business Unit Group]) = "CUSTOMER DISTRIBUTION CENTER" then "Retail" else if Text.Upper([Business Unit Group]) = "CUSTOMER SERVICE CENTRE" then "Retail" else if Text.Upper([Business Unit Group]) = "DISTRIBUTION CENTRE" then "Retail" else if Text.Upper([Business Unit Group]) = "DISTRIBUTION SERVICE OFFICE" then "Retail" else if Text.Upper([Business Unit Group]) = "DISTRIBUTION SUPPORT UNIT" then "Retail" else if Text.Upper([Business Unit Group]) = "PROPERTY SUPPORT UNIT" then "Retail" else if Text.Upper([Business Unit Group]) = "SERVICE OFFICE" then "Retail" else if Text.Upper([Business Unit Group]) = "STORE" then "Retail" else "Ingka", type text)
+				in
+				    AddColumn_BusinessUnit
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

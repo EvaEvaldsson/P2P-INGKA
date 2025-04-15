@@ -1,0 +1,577 @@
+table 'Purchase Order Line'
+	lineageTag: 37eaf43f-b505-4776-936a-6379025be2dc
+
+	measure sf_purchaseorderlines =
+			
+			INT ( NOT ISEMPTY ( 'Purchase Order Line' ) )
+		formatString: 0
+		displayFolder: .Report Design Measures
+		lineageTag: 22b799d7-4767-463c-9620-9156676763b5
+
+		changedProperty = DisplayFolder
+
+	measure 'No. of Purchase Orders' =
+			
+			DISTINCTCOUNT ( 'Purchase Order Line'[Order Number] )
+		formatString: #,0
+		displayFolder: .Measures
+		lineageTag: 0423e20a-9fc2-437a-9c67-ab5b65bdaee7
+
+		changedProperty = DisplayFolder
+
+	measure 'Order Value (€)' =
+			
+			SUM ( 'Purchase Order Line'[Value EUR] )
+		displayFolder: .Measures
+		lineageTag: d79e590a-f021-4828-a6f8-14f5e0179b80
+
+		changedProperty = DisplayFolder
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'No. of Purchase Order Lines' =
+			
+			COUNTROWS ( 'Purchase Order Line' )
+		formatString: 0
+		displayFolder: .Measures
+		lineageTag: f65e7347-a30f-47c7-bcc8-dfc20084402d
+
+		changedProperty = DisplayFolder
+
+	measure 'Order Value (€) running total in new_unit_price_eur' =
+			
+			CALCULATE(
+				[Order Value (€)],
+				FILTER(
+					ALLSELECTED('Purchase Order Line'[new_unit_price_eur]),
+					ISONORAFTER('Purchase Order Line'[new_unit_price_eur], MAX('Purchase Order Line'[new_unit_price_eur]), DESC)
+				)
+			)
+		lineageTag: ff652718-8b7e-4063-acaa-b70e76676fe8
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "RunningTotal"
+				}
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Order Value (€) running total in new_unit_price_eur 2' =
+			
+			CALCULATE(
+				[Order Value (€)],
+				FILTER(
+					ALLSELECTED('Purchase Order Line'[new_unit_price_eur]),
+					ISONORAFTER('Purchase Order Line'[new_unit_price_eur], MAX('Purchase Order Line'[new_unit_price_eur]), DESC)
+				)
+			)
+		lineageTag: 51b8bef2-cdaa-4cc1-a9bf-6eaded1d05e1
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "RunningTotal"
+				}
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Order Value (€) running total in new_unit_price_eur 3' =
+			
+			CALCULATE(
+				[Order Value (€)],
+				FILTER(
+					ALLSELECTED('Purchase Order Line'[new_unit_price_eur]),
+					ISONORAFTER('Purchase Order Line'[new_unit_price_eur], MAX('Purchase Order Line'[new_unit_price_eur]), DESC)
+				)
+			)
+		lineageTag: 45dee29c-ddc9-4655-8584-fcdf297700fc
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "RunningTotal"
+				}
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Order Value (€) running total in new_unit_price_eur 4' =
+			
+			CALCULATE(
+				[Order Value (€)],
+				FILTER(
+					ALLSELECTED('Purchase Order Line'[new_unit_price_eur]),
+					ISONORAFTER('Purchase Order Line'[new_unit_price_eur], MAX('Purchase Order Line'[new_unit_price_eur]), DESC)
+				)
+			)
+		lineageTag: 43f1d192-5d6c-4498-b9b5-1dc6c0f5d9bf
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "RunningTotal"
+				}
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Measure 4' = sum('Purchase Order Line'[new_value_eur])
+		displayFolder: .Measures
+		lineageTag: 299fbb92-1186-46cb-9042-0154e1f6423e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Measure 4 min per Order Date' =
+			
+			MINX(
+				KEEPFILTERS(VALUES('Purchase Order Line'[Order Date])),
+				CALCULATE([Measure 4])
+			)
+		lineageTag: e485ce5b-01d7-44df-a17f-27ea144268ed
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "MinPerCategory"
+				}
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Order Number'
+		dataType: string
+		lineageTag: ac145dc0-603a-4cd6-b700-733fffdaaa18
+		summarizeBy: none
+		sourceColumn: Order Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Changed Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		sourceProviderType: date
+		displayFolder: .Dates
+		lineageTag: 1e153007-ab39-4b1e-ae68-d9ed3aa5a8df
+		summarizeBy: none
+		sourceColumn: Changed Date
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Order Line Number'
+		dataType: string
+		lineageTag: f652b18d-d93e-4f96-82d8-0c4aa03bfef1
+		summarizeBy: none
+		sourceColumn: Order Line Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Status'
+		dataType: string
+		lineageTag: 31b58255-66cc-4314-9678-8f889183c885
+		summarizeBy: none
+		sourceColumn: Order Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		sourceProviderType: date
+		displayFolder: .Dates
+		lineageTag: 87f28240-1795-4d13-9929-a2953c8c92d4
+		summarizeBy: none
+		sourceColumn: Order Date
+
+		changedProperty = DisplayFolder
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Order Line Status'
+		dataType: string
+		lineageTag: 50947689-22b2-4d59-9989-f76601981aa0
+		summarizeBy: none
+		sourceColumn: Order Line Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column legal_unit_code
+		dataType: string
+		lineageTag: ba78184b-3f3a-4a51-8ee9-0aca812f21b5
+		summarizeBy: none
+		sourceColumn: legal_unit_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Manufacturer Name'
+		dataType: string
+		lineageTag: 7ffcf7ad-c923-43e5-8da5-817aeb0d97d1
+		summarizeBy: none
+		sourceColumn: Manufacturer Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unit of Measure'
+		dataType: string
+		lineageTag: 9fb428df-bc75-4ba8-8452-b29ff4c3836c
+		summarizeBy: none
+		sourceColumn: Unit of Measure
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier Part Ref'
+		dataType: string
+		lineageTag: 3b556507-1a48-4a19-88c2-a3aec27b07b1
+		summarizeBy: none
+		sourceColumn: Supplier Part Ref
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'GL Account No'
+		dataType: string
+		lineageTag: e63e56c2-aee8-4981-94da-f84d0adbf4ba
+		summarizeBy: none
+		sourceColumn: GL Account No
+
+		annotation SummarizationSetBy = Automatic
+
+	column cost_centre_code
+		dataType: string
+		lineageTag: 7b69344b-a7e3-4351-9f74-a49397d1906d
+		summarizeBy: none
+		sourceColumn: cost_centre_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Call Off Method'
+		dataType: string
+		lineageTag: 277a7804-b365-45e5-a5d5-55bead17beaf
+		summarizeBy: none
+		sourceColumn: Call Off Method
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Process Type Original'
+		dataType: string
+		lineageTag: 49b7978e-0461-47c5-8d6b-fbc7e1cdb591
+		summarizeBy: none
+		sourceColumn: Process Type Original
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Source View Name'
+		dataType: string
+		lineageTag: d4d75de2-1e74-4349-a2fc-d843a8d1dee8
+		summarizeBy: none
+		sourceColumn: Source View Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Identifier Unspc'
+		dataType: string
+		lineageTag: b748a201-1173-4a5c-a3bc-9a46d9a277f3
+		summarizeBy: none
+		sourceColumn: Product Identifier Unspc
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Name'
+		dataType: string
+		lineageTag: 4a56c838-07f8-450b-81fc-4a07e85ee110
+		summarizeBy: none
+		sourceColumn: Product Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Category Desc'
+		dataType: string
+		lineageTag: 972e9c80-bb32-4420-a6f1-f1a824cc26e2
+		summarizeBy: none
+		sourceColumn: Product Category Desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Catalog Name'
+		dataType: string
+		lineageTag: 3c35f89f-e49b-4618-a8f9-d87778ffddfc
+		summarizeBy: none
+		sourceColumn: Catalog Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: double
+		lineageTag: d1ac2391-7f0b-45f1-8651-589e297544bc
+		summarizeBy: none
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Unit Price (original currency)'
+		dataType: double
+		lineageTag: 32be03a1-c9e1-4d0d-bd4f-e09de71e95a8
+		summarizeBy: none
+		sourceColumn: Unit Price (original currency)
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Value (original currency)'
+		dataType: double
+		lineageTag: 1ce23be2-0633-4fe6-b939-d110eaac1e3a
+		summarizeBy: none
+		sourceColumn: Value (original currency)
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Original Currency Code'
+		dataType: string
+		lineageTag: 571d73db-2e95-4a0f-b192-9653e7135885
+		summarizeBy: none
+		sourceColumn: Original Currency Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unit Price EUR'
+		dataType: double
+		lineageTag: c3c46d56-f34c-45cb-b332-19ec934f00b7
+		summarizeBy: none
+		sourceColumn: Unit Price EUR
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Value EUR'
+		dataType: double
+		formatString: 0.00
+		lineageTag: 78582e27-c7cd-42ec-a594-1d74837edc0f
+		summarizeBy: none
+		sourceColumn: Value EUR
+
+		annotation SummarizationSetBy = User
+
+	column 'Supplier Product Number'
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: 74b2ced1-0162-4158-9404-b7fc4d0d8f73
+		summarizeBy: none
+		sourceColumn: Supplier Product Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Account Object1'
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: 9eeb2b64-f7eb-4023-933c-fa129511357e
+		summarizeBy: none
+		sourceColumn: Account Object1
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: c2932c2d-9677-4d43-8739-67f8e692a49e
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Process Type'
+		dataType: string
+		sourceProviderType: nvarchar(max)
+		lineageTag: 4660054b-7f9b-46b5-95e2-28b8b839a208
+		summarizeBy: none
+		sourceColumn: Process Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendor_name
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: c98237d4-b17c-44a4-9a39-d9deb6d07cb1
+		summarizeBy: none
+		sourceColumn: vendor_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Date Rank' =
+			RANKX(
+			    FILTER(ALL('Purchase Order Line'),'Purchase Order Line'[Order Number] = EARLIER('Purchase Order Line'[Order Number])
+			),'Purchase Order Line'[Order Date],,ASC,Dense
+			)
+		formatString: 0
+		lineageTag: e64bf54d-3c05-407d-926a-fb7f9d3b913b
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Source View Name - Copy.1'
+		dataType: string
+		lineageTag: a7887e1f-c18d-4598-bba1-ecb8da8f3498
+		summarizeBy: none
+		sourceColumn: Source View Name - Copy.1
+
+		annotation SummarizationSetBy = Automatic
+
+	column new_unit_price_eur
+		dataType: double
+		lineageTag: fe4c0a79-55c8-442e-b065-b8be6e5707b6
+		summarizeBy: sum
+		sourceColumn: new_unit_price_eur
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column new_value_eur
+		dataType: double
+		formatString: 0.00
+		lineageTag: 3260a197-fc4e-430d-8408-09c11468006d
+		summarizeBy: sum
+		sourceColumn: new_value_eur
+
+		annotation SummarizationSetBy = Automatic
+
+	column test = 'Purchase Order Line'[Value EUR] ='Purchase Order Line'[new_value_eur]
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8a78d9ca-ed25-4b83-99e2-ac028c37e189
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column ingestion_time
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: acd8df93-03f9-4da0-a138-af017acb1d70
+		summarizeBy: none
+		sourceColumn: ingestion_time
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column ingest_dttm
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: cc238761-e5a2-4894-88ca-c1623280859d
+		summarizeBy: none
+		sourceColumn: ingest_dttm
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column source_system
+		dataType: string
+		lineageTag: 7a54c2c0-101f-43a5-9f28-ad93a1eba1c5
+		summarizeBy: none
+		sourceColumn: source_system
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier ID'
+		dataType: string
+		lineageTag: bb149178-4f4b-486c-824a-c31a63e41230
+		summarizeBy: none
+		sourceColumn: Supplier ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column gl_account_no_sap
+		dataType: string
+		lineageTag: 1275bf40-ed32-403f-ab1b-c1eb58ded02e
+		summarizeBy: none
+		sourceColumn: gl_account_no_sap
+
+		annotation SummarizationSetBy = Automatic
+
+	column current_rank
+		dataType: int64
+		formatString: 0
+		lineageTag: c2340371-caac-4d30-9ce4-f03492c4fc66
+		summarizeBy: sum
+		sourceColumn: current_rank
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendor_code
+		dataType: string
+		lineageTag: 7f06dcb1-2983-45d0-971a-3645937d1e80
+		summarizeBy: none
+		sourceColumn: vendor_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendor_type
+		dataType: string
+		lineageTag: 833a9fec-3505-4f15-bbdc-4609d0ab9fca
+		summarizeBy: none
+		sourceColumn: vendor_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column quantity_perunit
+		dataType: string
+		lineageTag: fe0eba07-4bb2-4ca6-b885-10add2dcd7e6
+		summarizeBy: none
+		sourceColumn: quantity_perunit
+
+		annotation SummarizationSetBy = Automatic
+
+	column country_code
+		dataType: string
+		lineageTag: 398f6782-5fea-4ff4-99ff-7b3ec4555648
+		summarizeBy: none
+		sourceColumn: country_code
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Purchase Order Line-519e5e21-4922-4c7c-902e-b41ef296e983' = m
+		mode: import
+		queryGroup: '4-Load to Model'
+		source =
+				let
+				    Source = GCP_dataform_procBi_datamart,
+				    Data = Source{[Name="purchase_order_fct_vw",Kind="View"]}[Data],
+				    FilteredRows = Table.SelectRows(Data, each [order_status] <> "Deleted"),
+				    ChangedType_OrderDate = Table.TransformColumnTypes(FilteredRows,{{"order_date", type datetime}}),
+				    FilteredRows_Incremental = Table.SelectRows(ChangedType_OrderDate, each [order_date] > RangeStart and [order_date] <= RangeEnd),
+				    RenamedColumns = Table.RenameColumns(FilteredRows_Incremental,{{"gl_account_no", "GL Account No"}, {"order_line_status", "Order Line Status"}, {"manufacturer_name", "Manufacturer Name"}, {"unit_of_measure", "Unit of Measure"}, {"vendor_part_ref", "Supplier Part Ref"}, {"call_off_method", "Call Off Method"}, {"process_type", "Process Type Original"}, {"source_view_name", "Source View Name"}, {"vendor_product_no", "Supplier Product Number"}, {"product_identifier_unspc", "Product Identifier Unspc"}, {"product_name", "Product Name"}, {"product_category_description", "Product Category Desc"}, {"catalog_name", "Catalog Name"}, {"quantity", "Quantity"}, {"unit_price_original_currency", "Unit Price (original currency)"}, {"value_original_currency", "Value (original currency)"}, {"original_currency_code", "Original Currency Code"}, {"unit_price_eur", "Unit Price EUR"}, {"value_eur", "Value EUR"}, {"order_no", "Order Number"}, {"order_line_no", "Order Line Number"}, {"order_status", "Order Status"}, {"changed_date", "Changed Date"}, {"order_date", "Order Date"}, {"process_type_2", "Process Type"}, {"supplier_id", "Supplier ID"}, {"country", "Country"}, {"accountobject1", "Account Object1"}}),
+				    ChangedType = Table.TransformColumnTypes(RenamedColumns,{{"Order Date", type date}}),
+				    DuplicatedColumn = Table.DuplicateColumn(ChangedType, "Source View Name", "Source View Name - Copy"),
+				    SplitColumn = Table.SplitColumn(DuplicatedColumn, "Source View Name - Copy", Splitter.SplitTextByDelimiter("_", QuoteStyle.Csv), {"Source View Name - Copy.1", "country_code"})
+				in
+				    SplitColumn
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

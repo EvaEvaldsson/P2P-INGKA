@@ -1,0 +1,164 @@
+perspective 'BN report Perspective'
+
+	perspectiveTable 'Cost Centre'
+
+		perspectiveColumn 'Cost Center Code'
+
+	perspectiveTable Country
+
+		perspectiveColumn 'Country Name'
+
+	perspectiveTable Date
+
+		perspectiveColumn 'FY Year'
+
+		perspectiveColumn 'FY Period'
+
+	perspectiveTable 'GL account'
+
+		perspectiveColumn 'Spend Group 1'
+
+		perspectiveColumn 'Spend Group 2'
+
+		perspectiveColumn 'GL Account Name'
+
+		perspectiveColumn 'GL Account Number'
+
+		perspectiveColumn Legacy_GL_No
+
+	perspectiveTable 'Invoice Line'
+
+		perspectiveMeasure 'No. of invoices'
+
+		perspectiveMeasure 'Latest Invoice'
+
+		perspectiveMeasure 'No. of invoices payed'
+
+		perspectiveMeasure 'PO after the Invoice'
+
+		perspectiveMeasure '30 Share of invoices payed on time'
+
+		perspectiveMeasure 'No. of invoices Adjusted'
+
+		perspectiveColumn 'Entry Date'
+
+		perspectiveColumn 'Due Date'
+
+		perspectiveColumn 'Invoice Date'
+
+		perspectiveColumn 'Invoice Payment Date'
+
+		perspectiveColumn 'Invoice Reference ID'
+
+		perspectiveColumn 'Match Status'
+
+		perspectiveColumn manual_handling
+
+		perspectiveColumn 'Order Number'
+
+		perspectiveColumn 'Transfer Date'
+
+		perspectiveColumn 'Supplier has content in iShop'
+
+		perspectiveColumn 'Payment Terms'
+
+		perspectiveColumn 'Supplier Invoice Number'
+
+		perspectiveColumn profit_centre
+
+		perspectiveColumn profit_centre_name
+
+		perspectiveColumn invoiceformat
+
+		perspectiveColumn ELEMENT_5
+
+		perspectiveColumn 'Has sending system'
+
+		perspectiveColumn Source
+
+		perspectiveColumn link
+
+	perspectiveTable 'Legal Unit'
+
+		perspectiveColumn 'Legal Unit Code-Name'
+
+	perspectiveTable Measurements
+
+		perspectiveMeasure 'Invoiced Amount EUR'
+
+		perspectiveMeasure 'Spend on contracted suppliers'
+
+		perspectiveMeasure 'No. of suppliers used'
+
+		perspectiveMeasure 'PO Compliance'
+
+		perspectiveMeasure 'Invoice Matching'
+
+		perspectiveMeasure 'Spend on contracted suppliers %'
+
+		perspectiveMeasure 'Share of invoices payed on time'
+
+		perspectiveMeasure 'Invoices payed on time'
+
+		perspectiveMeasure 'New suppliers'
+
+		perspectiveMeasure 'No. of suppliers used last 12 whole months'
+
+		perspectiveMeasure 'Number of non PO compliant invoices'
+
+		perspectiveMeasure 'Number of not invoice matched Invoices'
+
+		perspectiveMeasure 'Invoice Matching Adjusted'
+
+		perspectiveMeasure 'PO Compliance Adjusted'
+
+		perspectiveMeasure 'Number of PO compliant invoices'
+
+		perspectiveMeasure 'Number of PO compliant invoices (adjusted)'
+
+		perspectiveMeasure 'No of invoice matched invoices'
+
+		perspectiveMeasure 'No of invoice matched invoices Adjusted'
+
+	perspectiveTable Supplier
+
+		perspectiveColumn 'Supplier Name'
+
+		perspectiveColumn 'First Ever Invoice Date'
+
+		perspectiveColumn 'Creation Month'
+
+		perspectiveColumn 'Creation Date'
+
+		perspectiveColumn 'Spend Classification (CFY)'
+
+		perspectiveColumn 'Spend Classification (LFY)'
+
+		perspectiveColumn 'Supplier ID'
+
+		perspectiveColumn Supplier_Country_Name
+
+		perspectiveColumn 'Country Code'
+
+		perspectiveColumn 'Supplier Grouping'
+
+		perspectiveColumn 'Category Area'
+
+		perspectiveColumn Category
+
+		perspectiveColumn 'Sub Category'
+
+		perspectiveColumn 'Supplier Classification'
+
+	perspectiveTable 'Supplier Details'
+
+		perspectiveColumn 'Supplier in iShop'
+
+		perspectiveColumn iShopContent
+
+	perspectiveTable 'Business Unit'
+
+		perspectiveColumn 'Business Unit Code Name'
+
+		perspectiveColumn 'Business Unit Group'
+

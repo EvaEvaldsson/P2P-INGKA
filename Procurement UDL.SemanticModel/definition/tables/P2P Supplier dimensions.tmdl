@@ -1,0 +1,49 @@
+table 'P2P Supplier dimensions'
+	lineageTag: 04e9c790-a303-4291-aa06-99d2cd0609d6
+
+	column 'P2P Supplier dimensions'
+		lineageTag: 52712a2e-c7a3-40be-9cdb-9ecc07c73620
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'P2P Supplier dimensions Order'
+
+		relatedColumnDetails
+			groupByColumn: 'P2P Supplier dimensions Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'P2P Supplier dimensions Fields'
+		isHidden
+		lineageTag: f13e6d80-129c-4893-a8ec-95be7de90d18
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'P2P Supplier dimensions Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'P2P Supplier dimensions Order'
+		isHidden
+		formatString: 0
+		lineageTag: 88f0ef0b-7d59-4cf7-871c-0bb92bf334c7
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'P2P Supplier dimensions' = calculated
+		mode: import
+		source =
+				{
+				    ("Supplier ID", NAMEOF('Supplier'[Supplier ID]), 0),
+				    ("Supplier Name", NAMEOF('Supplier'[Supplier Name]), 1),
+				    ("Country Name", NAMEOF('Country'[Country Name]), 2)
+				}
+
+	annotation PBI_Id = cf07c068a41e4166835079f2fee3dfbb
+

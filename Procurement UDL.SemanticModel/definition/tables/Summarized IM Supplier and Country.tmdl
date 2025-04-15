@@ -1,0 +1,106 @@
+table 'Summarized IM Supplier and Country'
+	isHidden
+	lineageTag: 15a8bdcf-da79-4627-9601-ffb00406004b
+
+	measure 'IA rank' =
+			
+			/*
+			RANKX (
+			    'Summarized IM Supplier and Country',
+			    'Summarized IM Supplier and Country'[IA EUR],
+			    ,
+			    DESC,
+			    DENSE
+			)
+			*/
+		formatString: 0
+		isHidden
+		lineageTag: 794d29d5-91bd-4b26-b89b-a4622cebe8f4
+
+		changedProperty = IsHidden
+
+	measure 'No. of sups' =
+			
+			DISTINCTCOUNT ( 'Summarized IM Supplier and Country'[Supplier ID] )
+		formatString: 0
+		isHidden
+		lineageTag: 188ed351-4807-4a22-9ac2-dc0b70a08834
+
+		changedProperty = IsHidden
+
+	measure 'Measure 2' =
+			
+			VAR temp =
+			    SUMMARIZE (
+			        'Summarized IM Supplier and Country',
+			        'Summarized IM Supplier and Country'[Supplier ID],
+			        "% invoiced", 'Summarized IM Supplier and Country'[Total Invoiced]
+			    )
+			VAR temp1 =
+			    ADDCOLUMNS ( temp, "rank", RANKX ( temp, [% invoiced],, DESC, DENSE ) )
+			VAR temp2 =
+			    ADDCOLUMNS (
+			        temp1,
+			        "Cummulative", SUMX ( FILTER ( temp1, [rank] <= EARLIER ( [rank] ) ), [% invoiced] )
+			    )
+			RETURN
+			    MINX ( FILTER ( temp2, [Cummulative] > 0.8 ), [rank] )
+		formatString: 0
+		isHidden
+		lineageTag: a2861909-5964-4f20-abcc-4e8c499f40f3
+
+		changedProperty = IsHidden
+
+	measure 'Total Invoiced' =
+			
+			SUM ( 'Summarized IM Supplier and Country'[IA EUR] )
+		isHidden
+		lineageTag: c1cffed6-7aa4-4d25-9ea0-67f889fb53b8
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Supplier ID'
+		isHidden
+		lineageTag: 9848fc46-8647-440d-9404-f17d21c6f3f9
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[Supplier ID]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'IA EUR'
+		isHidden
+		lineageTag: 25bacffb-ab38-40c9-8191-3876289110cc
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [IA EUR]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column country_code
+		isHidden
+		lineageTag: 495316f1-2c54-4905-abb9-bb4cde3536cf
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Invoice Line[country_code]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Summarized IM Supplier and Country-9b1299a3-b67b-479e-9e5b-773244c56377' = calculated
+		mode: import
+		source = SUMMARIZECOLUMNS('Invoice Line'[Supplier ID],'Invoice Line'[country_code],"IA EUR",SUM('Invoice Line'[net_amount_eur]))
+
+	changedProperty = IsHidden
+
+	annotation PBI_Id = 84bae8d9076e4c329c1e54189a3230c2
+

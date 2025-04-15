@@ -1,0 +1,243 @@
+table 'Legal Unit'
+	lineageTag: ee59976f-f443-4e54-9c82-3d26b2207e8b
+
+	measure 'Count LU' = DISTINCTCOUNT('Legal Unit'[Legal Unit Code-Name])
+		formatString: 0
+		lineageTag: 1682df0f-2668-411f-986e-0842aed7f7ae
+
+	column legal_unit_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: d9c5b934-e024-469e-9036-6f8f85ce6072
+		summarizeBy: sum
+		sourceColumn: legal_unit_sk
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column legal_unit_bk
+		dataType: string
+		lineageTag: f878c5d6-7005-4806-a649-4a76d2831b62
+		summarizeBy: none
+		sourceColumn: legal_unit_bk
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Legal Unit Name'
+		dataType: string
+		lineageTag: edaa9d63-3dab-476f-891a-3221acc86752
+		summarizeBy: none
+		sourceColumn: Legal Unit Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Street
+		dataType: string
+		lineageTag: 56cc9246-30d0-4425-8e00-902a51f510ea
+		summarizeBy: none
+		sourceColumn: Street
+
+		annotation SummarizationSetBy = Automatic
+
+	column Postbox
+		dataType: string
+		lineageTag: 2a48a9c6-f88e-407a-a620-750ebbb78e10
+		summarizeBy: none
+		sourceColumn: Postbox
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Postal Code'
+		dataType: string
+		lineageTag: fd1bcc30-812c-49ca-af35-a40f3b29daa4
+		summarizeBy: none
+		sourceColumn: Postal Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: a4b7e6ff-9bcd-46de-a49d-caa841468c54
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: e2a89ad4-ca1e-41a0-9114-90fa1d0c1d55
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Country Code'
+		dataType: string
+		lineageTag: bb74e36a-b48e-43d1-8e41-560864dd70a8
+		summarizeBy: none
+		sourceColumn: Country Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Terms of Payment'
+		dataType: int64
+		formatString: 0
+		lineageTag: f2531dba-f4d1-4982-9d40-8d17af42fc8e
+		summarizeBy: sum
+		sourceColumn: Terms of Payment
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Creation Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 66d50077-2120-4ff7-ae3f-ed18d77ea51a
+		summarizeBy: none
+		sourceColumn: Creation Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Valid from Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 31e9e427-75cc-49d5-8090-d257778252e4
+		summarizeBy: none
+		sourceColumn: Valid from Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Additional Address Information'
+		dataType: string
+		lineageTag: ef0aaf46-308c-4a23-acc3-2927ee0bdd08
+		summarizeBy: none
+		sourceColumn: Additional Address Information
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CO Address'
+		dataType: string
+		lineageTag: f1dad20c-324f-4136-9c35-0101699f1acb
+		summarizeBy: none
+		sourceColumn: CO Address
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Preferred Order Method'
+		dataType: string
+		lineageTag: f69b1adf-9e7e-4500-9c2a-c18c242d22d1
+		summarizeBy: none
+		sourceColumn: Preferred Order Method
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Valid to Date'
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: cd6ea0b0-5000-4090-8a08-dfc868f6b9e1
+		summarizeBy: none
+		sourceColumn: Valid to Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column scd_curr_ind
+		dataType: string
+		lineageTag: c7e88993-82f2-4289-a9f4-e37c5e0275e1
+		summarizeBy: none
+		sourceColumn: scd_curr_ind
+
+		annotation SummarizationSetBy = Automatic
+
+	column legal_unit_short_name
+		dataType: string
+		lineageTag: 76a5b2ed-972e-4e67-a535-52473a5ba271
+		summarizeBy: none
+		sourceColumn: legal_unit_short_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column legal_unit_code
+		dataType: string
+		lineageTag: c661fc6c-e726-408e-b7ab-f8682e137743
+		summarizeBy: none
+		sourceColumn: legal_unit_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column legal_unit_type
+		dataType: string
+		lineageTag: 071bf984-161a-4b47-8c67-70beaede508c
+		summarizeBy: none
+		sourceColumn: legal_unit_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Legal Unit ID'
+		dataType: string
+		lineageTag: 8fc8b4f6-a986-4e23-bd87-1baaf285e4b6
+		summarizeBy: none
+		sourceColumn: Legal Unit ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Legal Unit Code-Name'
+		dataType: string
+		lineageTag: b9b37c4a-3e8b-467d-b783-1cc3f259e5ae
+		summarizeBy: none
+		sourceColumn: Legal Unit Code-Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column current_rank
+		dataType: int64
+		formatString: 0
+		lineageTag: 0aac991a-561f-42c8-b102-7ee4a8bdf592
+		summarizeBy: sum
+		sourceColumn: current_rank
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Country.Country Name'
+		dataType: string
+		lineageTag: 885c27b1-8fd6-4b9c-a504-7084a91f0f26
+		summarizeBy: none
+		sourceColumn: Country.Country Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Legal Unit-a9f08219-753b-4726-af5d-05aa7db75135' = m
+		mode: import
+		queryGroup: '4-Load to Model'
+		source = ```
+				let
+				    
+				    Source = GCP_dataform_p2p_datamart,
+				    Data = Source{[Name="legal_unit_dim_vw",Kind="View"]}[Data],
+				    RemovedDuplicates = Table.Distinct(Data, {"legal_unit_sk", "legal_unit_bk", "legal_unit_full_name", "legal_unit_code", "legal_unit_type"}),
+				    RenamedColumns = Table.RenameColumns(RemovedDuplicates,{{"city", "City"}, {"co_address", "CO Address"}, {"postal_code", "Postal Code"}, {"postbox", "Postbox"}, {"state", "State"}, {"street", "Street"}, {"legal_unit_full_name", "Legal Unit Name"}, {"terms_of_payment", "Terms of Payment"}, {"preferred_order_method", "Preferred Order Method"}, {"creation_date", "Creation Date"}, {"valid_from_date", "Valid from Date"}, {"valid_to_date", "Valid to Date"}, {"country_code", "Country Code"}, {"address_additional_information", "Additional Address Information"}, {"Legal_Unit_ID", "Legal Unit ID"}, {"Legal_Unit_Code_Name", "Legal Unit Code-Name"}}),
+				    RemovedColumns = Table.RemoveColumns(RenamedColumns,{"audit_payload", "INGESTION_TIME", "scd_record_hash", "ingest_dttm", "scd_start_dttm", "scd_end_dttm"}),
+				    ChangedType = Table.TransformColumnTypes(RemovedColumns,{{"Terms of Payment", Int64.Type}}),
+				    MergedQueries_Country = Table.NestedJoin(ChangedType, {"Country Code"}, Country, {"ga_code"}, "Country", JoinKind.LeftOuter),
+				    Expanded_Country = Table.ExpandTableColumn(MergedQueries_Country, "Country", {"Country Name"}, {"Country.Country Name"})
+				in
+				    Expanded_Country
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

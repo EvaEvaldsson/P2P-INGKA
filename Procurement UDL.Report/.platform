@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Procurement UDL"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "871774be-464d-4e10-a91d-abd8688a3c98"
+  }
+}

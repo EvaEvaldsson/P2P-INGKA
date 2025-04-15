@@ -1,0 +1,39 @@
+table 'Model Info'
+	lineageTag: 032c74fa-0316-4399-acfe-6f74f8d5a8a4
+
+	column LastRefresh
+		dataType: dateTime
+		formatString: yyyy-mm-dd hh:nn:ss
+		lineageTag: 842b0925-13fd-444e-887b-cc7623b8fd95
+		summarizeBy: none
+		sourceColumn: LastRefresh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column Environment
+		dataType: string
+		lineageTag: d9103a3e-ae07-4911-b7ba-2c5e93419ed6
+		summarizeBy: none
+		sourceColumn: Environment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Model Info-811296ba-9e70-414f-8a0f-2a0583869741' = m
+		mode: import
+		queryGroup: '1-Data Sources'
+		source =
+				let
+				    Source = DateTime.LocalNow(),
+				    #"Converted to Table" = #table(1, {{Source}}),
+				    AddColumn = Table.AddColumn(#"Converted to Table", "Environment", each EnvType, type text),
+				    RenamedColumns = Table.RenameColumns(AddColumn,{{"Column1", "LastRefresh"}}),
+				    ChangedType = Table.TransformColumnTypes(RenamedColumns,{{"LastRefresh", type datetime}})
+				in
+				    ChangedType
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

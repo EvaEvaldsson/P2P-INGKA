@@ -1,0 +1,470 @@
+table Measurements
+	lineageTag: 68af5b0e-01b4-4089-8a79-337daa2dcdd2
+
+	measure 'Invoiced Amount EUR' =
+			
+			SUM ( 'Invoice Line'[net_amount_eur] )
+		formatString: "€"\ #,0;-"€"\ #,0;"€"\ #,0
+		lineageTag: 6124f6f3-3b70-4dc5-a3ff-4c04c49c2764
+
+		changedProperty = FormatString
+
+	measure 'New suppliers' =
+			
+			CALCULATE (
+			    [No. of Suppliers Created],
+			    CROSSFILTER ( 'Invoice Line'[Supplier ID], 'Supplier'[Supplier ID], BOTH )
+			)
+		formatString: 0
+		lineageTag: e2ced674-e41b-4759-90e0-2d3ca24e0bc2
+
+	measure 'Spend on contracted suppliers' =
+			
+			CALCULATE (
+			    [Invoiced Amount EUR],
+			    FILTER (
+			        'Invoice Line',
+			        'Invoice Line'[Has Valid Contract] = TRUE ()
+			            || RELATED ( 'Supplier'[internal spend] ) = "Yes"
+			    )
+			)
+		lineageTag: 9d0fdf70-1893-4252-a3b8-5f501ddef0f9
+
+		changedProperty = FormatString
+
+	measure 'No. of suppliers used' =
+			
+			CALCULATE (
+			    [No. of Suppliers],
+			    CROSSFILTER ( 'Invoice Line'[Supplier ID], 'Supplier'[Supplier ID], BOTH )
+			)
+		formatString: 0
+		lineageTag: d5c8c104-1ec7-4142-89bd-8eccabc10de9
+
+	measure 'PO Compliance' =
+			
+			VAR CompliantInvoices =
+			    CALCULATE (
+			        [No. of invoices],
+			        KEEPFILTERS ( 'Invoice Line'[Compliance] = "Purchase Order Compliant" )
+			    )
+			RETURN
+			    DIVIDE (
+			        IF ( ISBLANK ( CompliantInvoices ), 0, CompliantInvoices ),
+			        [No. of Invoices]
+			    )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: f94859a0-14e9-48b8-b64e-90c37907253c
+
+		changedProperty = FormatString
+
+	/// This measure shows Yes for invoices that are 
+	/// 
+	measure 'Invoice Matching' = ```
+			
+			DIVIDE (
+			    IF (
+			        ISBLANK ( [No of invoice matched invoices] ),
+			        0,
+			        [No of invoice matched invoices]
+			    ),
+			    [No. of invoices]
+			)
+			
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 07327b41-ae0f-4766-963c-20dea9161523
+
+		changedProperty = FormatString
+
+	measure 'Spend on contracted suppliers %' = ```
+			
+			DIVIDE (
+			    IF (
+			        ISBLANK ( [Spend on contracted suppliers] ),
+			        0,
+			        [Spend on contracted suppliers]
+			    ),
+			    [Invoiced Amount EUR]
+			)
+			
+			```
+		formatString: 0%;-0%;0%
+		lineageTag: f8c7c529-a4e5-4e44-bcba-56fa9eb0699d
+
+		changedProperty = FormatString
+
+	measure 'Invoices payed on time' =
+			
+			CALCULATE ( [Invoices payed], 'Invoice Line'[Has Payment on Time] = "Yes" )
+		formatString: 0
+		lineageTag: 257118dc-1ea9-4cbf-9549-86d061b8be34
+
+	measure 'Share of invoices payed on time' =
+			
+			DIVIDE (
+			        IF ( ISBLANK ( [Invoices payed on time] ), 0, [Invoices payed on time] ),
+			        [Invoices payed]
+			    )
+		formatString: 0%;-0%;0%
+		lineageTag: 74000810-e727-4dee-be38-0661e8b5b91c
+
+		changedProperty = FormatString
+
+	measure 'No. of suppliers used by stores' =
+			
+			CALCULATE (
+			    [No. of suppliers used],
+			    'Invoice Line'[business_unit_type] = "STO"
+			)
+		formatString: 0
+		lineageTag: 9779ef5b-cb0e-4fed-9ec3-8d9955e30717
+
+	measure 'Number of invoiced stores' =
+			
+			CALCULATE (
+			    DISTINCTCOUNT ( 'Invoice Line'[BU Code] ),
+			    'Invoice Line'[business_unit_type] = "STO"
+			)
+		formatString: 0
+		lineageTag: c0090110-7ab4-45dd-9300-7a66e193a163
+
+	measure 'Avg no. of suppliers used per store' = ```
+			
+			DIVIDE ( [No. of suppliers used by stores], [Number of invoiced stores] )
+			
+			```
+		formatString: 0
+		lineageTag: 1a47ab46-b4d4-4ea6-a9ba-89cb122f7c41
+
+		changedProperty = FormatString
+
+	measure 'PO Compliance (ex. SB)' =
+			
+			VAR CompliantInvoices =
+			    CALCULATE (
+			        [No. of invoices],
+			        'Invoice Line'[Compliance] = "Purchase Order Compliant"
+			    )
+			RETURN
+			    DIVIDE (
+			        IF ( ISBLANK ( CompliantInvoices ), 0, CompliantInvoices ),
+			        [No. of Invoices (ex. SB)]
+			    )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: bef75b93-a481-4308-a53d-effc52266286
+
+		changedProperty = FormatString
+
+	measure 'Invoices payed' =
+			
+			CALCULATE (
+			    [No. of invoices],
+			    USERELATIONSHIP ( 'Invoice Line'[Invoice Payment Date], 'Date'[Calendar Date] )
+			)
+		formatString: 0
+		lineageTag: 5ad6de7a-b901-4634-9254-ad28d898888f
+
+	measure CompliantInvoiceNo =
+			
+			1
+		formatString: 0
+		lineageTag: 8f96d718-7179-4d1d-aaaa-b4bf50e71c11
+
+	measure 'No. of suppliers used per billion of invoiced amount' =
+			
+			Measurements[No. of suppliers used] / ( [Invoiced Amount EUR] / 1000000000 )
+		lineageTag: 9fc9c78d-6320-4ea6-9a1c-e4f638e2777d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'No. of suppliers used last 12 whole months' =
+			
+			CALCULATE (
+			    [No. of suppliers used],
+			    ALL ( Supplier ),
+			    ALL ( date ),
+			    'Date'[IsLast12WholeMonths] = "Yes"
+			)
+		formatString: 0
+		lineageTag: 0ef658eb-8cb7-42cf-9763-574167d80894
+
+	measure 'PO Compliance MoM%' = ```
+			
+			VAR __PREV_MONTH =
+			    CALCULATE ( [PO Compliance], DATEADD ( 'Date'[Calendar Date], -1, MONTH ) )
+			RETURN
+			    DIVIDE ( [PO Compliance] - __PREV_MONTH, __PREV_MONTH )
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: debdaa32-402d-4e02-aafa-299fa1d4e59a
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "MonthOverMonth"
+				}
+
+		changedProperty = FormatString
+
+	measure 'Dynamic Supplier Rank' = ```
+			
+			RANKX (
+			    ALLSELECTED ( 'Summarized IM Supplier and Country' ),
+			    SUM ( 'Summarized IM Supplier and Country'[IA EUR] ),
+			    ,
+			    DESC,
+			    DENSE
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 2ece8aef-8d04-460d-bd60-85cd699560ff
+
+	measure 'Cumulated Total by Supplier' = ```
+			
+			/*
+			VAR LastVisibleClass =
+			    MAX ( [Dynamic Supplier Rank] )
+			VAR ClassesToSum =
+			    FILTER (
+			        ALLSELECTED ( Contract[Supplier Name], [Dynamic Supplier Rank] ),
+			        [Dynamic Supplier Rank] <= LastVisibleClass
+			    )
+			VAR Result =
+			    CALCULATE ( [Invoiced Amount EUR], ClassesToSum )
+			RETURN
+			    Result
+			*/
+			
+			```
+		lineageTag: bdfc51d0-1b0a-4ace-b5de-69a99e853e3d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PO Compliance -1M' =
+			
+			CALCULATE ( [PO Compliance], DATEADD ( 'Date'[Calendar Date], -1, MONTH ) )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Supplier action Measurements
+		lineageTag: 0fbf3f1a-80df-4b23-b0eb-c2e060f5211d
+
+		changedProperty = FormatString
+
+	measure 'PO Compliance -2M' =
+			
+			CALCULATE ( [PO Compliance], DATEADD ( 'Date'[Calendar Date], -2, MONTH ) )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Supplier action Measurements
+		lineageTag: ecd60cef-0518-4f91-93d4-a92d3735b9d7
+
+		changedProperty = FormatString
+
+	measure 'Diff PO compliance %-points' =
+			
+			[PO Compliance] - [PO Compliance -1M]
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Supplier action Measurements
+		lineageTag: 7aafa5e4-3eaf-4196-b58e-56ff627545c9
+
+		changedProperty = FormatString
+
+	measure 'Diff PO compliance %-points -1M' =
+			
+			[PO Compliance -1M] - [PO Compliance -2M]
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Supplier action Measurements
+		lineageTag: 48c546b2-63e8-4620-8f80-d697ba426264
+
+		changedProperty = FormatString
+
+	measure 'Invoice Matching -1M' =
+			
+			CALCULATE ( [Invoice Matching], DATEADD ( 'Date'[Calendar Date], -1, MONTH ) )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Supplier action Measurements
+		lineageTag: 1727bd69-10af-4bfb-9232-08588609d413
+
+		changedProperty = FormatString
+
+	measure 'Invoice Matching -2M' =
+			
+			CALCULATE ( [Invoice Matching], DATEADD ( 'Date'[Calendar Date], -2, MONTH ) )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Supplier action Measurements
+		lineageTag: 887e8920-d4c7-42aa-87b3-042e8bc224b8
+
+		changedProperty = FormatString
+
+	measure 'Diff Invoice Matching %-points' =
+			
+			[Invoice Matching] - [Invoice Matching -1M]
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Supplier action Measurements
+		lineageTag: c1037c3e-9c25-472e-b30d-fce41471a054
+
+		changedProperty = FormatString
+
+	measure 'Diff Invoice Matching %-points -1M' =
+			
+			[Invoice Matching -1M] - [Invoice Matching -2M]
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Supplier action Measurements
+		lineageTag: 18239fea-c5aa-4808-a9b2-297ff0a679e0
+
+		changedProperty = FormatString
+
+	measure 'Number of non PO compliant invoices' =
+			
+			CALCULATE (
+			    'Invoice Line'[No. of invoices],
+			    'Invoice Line'[Compliance] <> "Purchase Order Compliant"
+			)
+		formatString: 0
+		displayFolder: Supplier action Measurements
+		lineageTag: 76b5769c-7797-435f-a00b-80dfc9db6afb
+
+	measure 'Number of not invoice matched Invoices' = ```
+			
+			CALCULATE([No. of invoices], 
+			KEEPFILTERS('Invoice Line'[match] <> "Purchase Order Match"
+			&& 
+			'Invoice Line'[match] <> "Match"))
+			```
+		formatString: 0
+		displayFolder: Supplier action Measurements
+		lineageTag: 5e0feebf-05ad-4b05-af0d-489b7ed68e91
+
+	measure 'Invoiced amount last 12 whole months' =
+			
+			CALCULATE (
+			    [Invoiced Amount EUR],
+			    ALL ( Supplier ),
+			    ALL ( date ),
+			    'Date'[IsLast12WholeMonths] = "Yes"
+			)
+		lineageTag: 4bd93918-0fb3-4fd6-8c81-41c6c8d6b09f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'No. of suppliers used per billion of invoiced amount last 12 whole months' =
+			
+			Measurements[No. of suppliers used last 12 whole months] / ( [Invoiced amount last 12 whole months] / 1000000000 )
+		lineageTag: a7210a3c-bd70-4ef2-9372-d589b7aa610f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'No of invoice matched invoices' = CALCULATE([No. of invoices], KEEPFILTERS('Invoice Line'[match] IN {"Purchase Order Match","Match"}))
+		formatString: 0
+		lineageTag: 084b86b1-dd58-48c1-9014-cf6c9cc52bb4
+
+	measure 'PO Compliance Adjusted' =
+			
+			VAR CompliantInvoices =
+			    CALCULATE (
+			        [No. of invoices Adjusted],
+			        KEEPFILTERS ( 'Invoice Line'[Compliance] = "Purchase Order Compliant" )
+			    )
+			RETURN
+			    DIVIDE (
+			        IF ( ISBLANK ( CompliantInvoices ), 0, CompliantInvoices ),
+			        [No. of invoices Adjusted]
+			    )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 98455129-5f4f-4527-8e0f-80c19c055a99
+
+	measure 'No of invoice matched invoices Adjusted' = CALCULATE([No. of invoices Adjusted], KEEPFILTERS('Invoice Line'[match] IN {"Purchase Order Match","Match"}))
+		formatString: 0
+		lineageTag: a9c34b70-4d0a-42da-989a-9871931009c3
+
+	measure 'Invoice Matching Adjusted' = ```
+			
+			DIVIDE (
+			    IF (
+			        ISBLANK ( [No of invoice matched invoices Adjusted] ),
+			        0,
+			        [No of invoice matched invoices Adjusted]
+			    ),
+			    [No. of invoices Adjusted]
+			)
+			
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: bcf4b236-bb0c-48bb-a849-03414a066885
+
+	measure 'Invoiced Amount PO Invoices EUR' =
+			
+			CALCULATE([Invoiced Amount EUR], 'Invoice Line'[compliance] = "Purchase Order Compliant")
+		formatString: "€"\ #,0;-"€"\ #,0;"€"\ #,0
+		lineageTag: 955cb4fb-0584-476b-9caf-84a9e14f8e40
+
+	measure 'Number of PO compliant invoices' =
+			
+			CALCULATE (
+			    'Invoice Line'[No. of invoices],
+			    'Invoice Line'[Compliance] = "Purchase Order Compliant"
+			)
+		formatString: 0
+		displayFolder: Supplier action Measurements
+		lineageTag: 5f39fde6-ab5b-4ac5-8449-619889998983
+
+	measure 'Number of PO compliant invoices (adjusted)' =
+			
+			CALCULATE (
+			    'Invoice Line'[No. of invoices Adjusted],
+			    'Invoice Line'[Compliance] = "Purchase Order Compliant"
+			)
+		formatString: 0
+		displayFolder: Supplier action Measurements
+		lineageTag: 7fd59e05-9259-4d5b-9102-482fc1357fbd
+
+	measure 'PO Compliance Adj prio Classification' =
+			
+			CALCULATE (
+			    [PO Compliance Adjusted],
+			    'Supplier'[Supplier Classification] = "Strategic" || 'Supplier'[Supplier Classification] = "Tactical" || 'Supplier'[Supplier Classification] = "Preferred"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: ace16be3-b3fe-49c5-9723-e3a2f3e0b0e5
+
+	measure 'Invoice Matching Adj prio Classification' =
+			
+			CALCULATE (
+			    [Invoice Matching Adjusted],
+			    'Supplier'[Supplier Classification] = "Strategic" || 'Supplier'[Supplier Classification] = "Tactical" || 'Supplier'[Supplier Classification] = "Preferred"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 05986c52-2db7-490b-85ce-38f0bb400862
+
+	measure 'Pay on Time prio Classification' =
+			
+			CALCULATE (
+			    [Share of invoices payed on time],
+			    'Supplier'[Supplier Classification] = "Strategic" || 'Supplier'[Supplier Classification] = "Tactical" || 'Supplier'[Supplier Classification] = "Preferred"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: fd1c21b0-9022-4ba9-9e50-058eb0a90e31
+
+	column Column1
+		dataType: string
+		lineageTag: 3b4a2dea-913d-4ea3-bc5d-fb831005056d
+		summarizeBy: none
+		sourceColumn: Column1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Measurements-3f210e58-fe80-43c4-b1a9-f971c8a5fc79 = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WSkksSVSKjQUA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t])
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

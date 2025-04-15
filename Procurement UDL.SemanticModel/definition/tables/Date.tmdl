@@ -1,0 +1,576 @@
+table Date
+	lineageTag: 3078d71a-a5b8-41a7-b518-0a5165abd29f
+	dataCategory: Time
+
+	column date_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 578aa88e-0578-4951-adec-67d5af37dda3
+		summarizeBy: sum
+		sourceColumn: date_sk
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ingest_dttm
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 7b28502c-5039-47c6-8074-9644a51ac460
+		summarizeBy: none
+		sourceColumn: ingest_dttm
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Calendar Date'
+		dataType: dateTime
+		isKey
+		formatString: yyyy-mm-dd
+		lineageTag: f2d77716-64da-4c05-bcc9-4f0a2de91831
+		summarizeBy: none
+		sourceColumn: Calendar Date
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Calendar Day of Month no.'
+		dataType: double
+		lineageTag: 016f5706-a98f-4225-909f-7d75ea48f4ee
+		summarizeBy: sum
+		sourceColumn: Calendar Day of Month no.
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column calendar_qtr_no
+		dataType: double
+		lineageTag: 8a061dd8-3ff1-442e-b3c1-94339666c008
+		summarizeBy: sum
+		sourceColumn: calendar_qtr_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Calendar Month Name'
+		dataType: string
+		lineageTag: 3144c650-f960-41db-a2dc-9a1edb6047fd
+		summarizeBy: none
+		sourceColumn: Calendar Month Name
+		sortByColumn: calendar_month_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column calendar_month_no
+		dataType: double
+		lineageTag: 39302faa-ed39-410e-a5ba-a0bc19bebb54
+		summarizeBy: sum
+		sourceColumn: calendar_month_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Calendar Year Month no.'
+		dataType: double
+		formatString: 0
+		lineageTag: ff12a6e4-b4aa-41b4-877e-f91b7d9a2f1e
+		summarizeBy: sum
+		sourceColumn: Calendar Year Month no.
+
+		annotation SummarizationSetBy = Automatic
+
+	column calendar_year_week
+		dataType: double
+		lineageTag: 54ccddd0-ec61-47a2-ac81-769001f79da4
+		summarizeBy: sum
+		sourceColumn: calendar_year_week
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Week Day Name'
+		dataType: string
+		lineageTag: 51e8b1d5-c239-41da-ac08-0e0427d7d288
+		summarizeBy: none
+		sourceColumn: Week Day Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscal_year_no
+		dataType: double
+		lineageTag: ebe5ba32-cea6-4677-b5ad-b8ec2f2ec258
+		summarizeBy: sum
+		sourceColumn: fiscal_year_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fiscal_year_month_day_no
+		dataType: double
+		lineageTag: c568384a-c2c4-4c33-a3e8-94b8b1a79b54
+		summarizeBy: sum
+		sourceColumn: fiscal_year_month_day_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fiscal_year
+		dataType: string
+		lineageTag: 069eb13b-4500-416b-ac38-14cf47f5068c
+		summarizeBy: none
+		sourceColumn: fiscal_year
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'FY Year'
+		dataType: string
+		lineageTag: da025565-c464-4b6b-9fdd-98a8b24300b5
+		summarizeBy: none
+		sourceColumn: FY Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscal_year_month
+		dataType: double
+		lineageTag: 15202390-a48a-47a4-aa07-b0906515365a
+		summarizeBy: sum
+		sourceColumn: fiscal_year_month
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'FY Month Name'
+		dataType: string
+		lineageTag: cea19da9-d232-40d9-86a6-4118d25f66dd
+		summarizeBy: none
+		sourceColumn: FY Month Name
+		sortByColumn: fiscal_month_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscal_year_month_no
+		dataType: double
+		lineageTag: 42d6fe39-bca4-41e9-82a0-3d64acbf5fba
+		summarizeBy: sum
+		sourceColumn: fiscal_year_month_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fiscal_year_qtr
+		dataType: double
+		lineageTag: 91f1eafe-9aeb-4ffa-b489-b5e38358854b
+		summarizeBy: sum
+		sourceColumn: fiscal_year_qtr
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fiscal_year_qtr_name
+		dataType: string
+		lineageTag: 6c7d115d-bddf-49b6-92e8-101ace5f1c21
+		summarizeBy: none
+		sourceColumn: fiscal_year_qtr_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscal_year_seq_no
+		dataType: double
+		lineageTag: bc8c10fd-37bb-4fe2-8b6a-737bf0f9d591
+		summarizeBy: sum
+		sourceColumn: fiscal_year_seq_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fiscal_year_tertial_no
+		dataType: double
+		lineageTag: 46c9d58a-fa25-4855-967d-b8ccbab6c0b0
+		summarizeBy: sum
+		sourceColumn: fiscal_year_tertial_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'FY Tertial Name'
+		dataType: string
+		lineageTag: ce049f73-2c00-413c-b001-cf6098567cb9
+		summarizeBy: none
+		sourceColumn: FY Tertial Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscal_first_day
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d7da5408-34dc-4a5f-9c85-a6486a40c2ec
+		summarizeBy: none
+		sourceColumn: fiscal_first_day
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column fiscal_last_day
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a88570dc-4f49-4aac-a43f-f169fec10b15
+		summarizeBy: none
+		sourceColumn: fiscal_last_day
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column pcd_ind
+		dataType: string
+		lineageTag: 649db7f9-361a-43e8-8291-972b08e1a21a
+		summarizeBy: none
+		sourceColumn: pcd_ind
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column sales_year_week4
+		dataType: double
+		lineageTag: 67f7754d-8d04-4a11-acea-913f8c47da75
+		summarizeBy: sum
+		sourceColumn: sales_year_week4
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column sales_year_week_day_no
+		dataType: double
+		lineageTag: c92eba25-8f3c-4728-8aa8-45842a4f3491
+		summarizeBy: sum
+		sourceColumn: sales_year_week_day_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column sales_year_week
+		dataType: string
+		lineageTag: f3091067-44d6-444f-82e9-bdb0f98019bc
+		summarizeBy: none
+		sourceColumn: sales_year_week
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column comp_sales_year_week_no
+		dataType: double
+		lineageTag: 7e2e55d2-1440-413f-91a9-bccd3b89b056
+		summarizeBy: sum
+		sourceColumn: comp_sales_year_week_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column sales_year_week_seq_no
+		dataType: double
+		lineageTag: ea2447d1-524c-4b49-9756-60efcedd238e
+		summarizeBy: sum
+		sourceColumn: sales_year_week_seq_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column sales_year_week4_name
+		dataType: string
+		lineageTag: d0e6d723-1515-4a02-b437-76b02b02b1d8
+		summarizeBy: none
+		sourceColumn: sales_year_week4_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column sales_week_seq_no
+		dataType: double
+		lineageTag: b290c030-915f-4e83-b929-80019ebfece2
+		summarizeBy: sum
+		sourceColumn: sales_week_seq_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column bimonthly_seq_no
+		dataType: double
+		lineageTag: 5f33eac9-1495-4ad4-9146-448a126c7efd
+		summarizeBy: sum
+		sourceColumn: bimonthly_seq_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column bimonthly_no
+		dataType: double
+		lineageTag: 12e98ab4-2929-4477-aed3-a2ca583fb95e
+		summarizeBy: sum
+		sourceColumn: bimonthly_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column bimonthly_name
+		dataType: string
+		lineageTag: c927d083-c035-451a-9321-8b7194253a21
+		summarizeBy: none
+		sourceColumn: bimonthly_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column bimonthly_period_no
+		dataType: double
+		lineageTag: 2c0efbb6-d1ec-4dd6-9f01-e845fcba5acd
+		summarizeBy: sum
+		sourceColumn: bimonthly_period_no
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column bimonthly_first_day
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 2bb5f2e7-be0d-48e3-9269-1350affa1b16
+		summarizeBy: none
+		sourceColumn: bimonthly_first_day
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column bimonthly_last_day
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 79d6347a-48bc-4cb1-9a31-66b5070091ba
+		summarizeBy: none
+		sourceColumn: bimonthly_last_day
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column fiscal_month_number = ```
+			
+			RIGHT ( 'Date'[fiscal_year_month], 2 )
+			
+			```
+		isHidden
+		lineageTag: 461aa41b-cc13-4ed4-87c3-91e70369a8a8
+		summarizeBy: none
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'FY Period' =
+			
+			'Date'[FY Year] & "-" & 'Date'[fiscal_month_number]
+		lineageTag: 924ad08c-d074-4517-b41e-5833abfb4d4f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsCurrentMonth = ```
+			
+			IF (
+			    YEAR ( 'Date'[Calendar Date] ) = YEAR ( TODAY () )
+			        && MONTH ( 'Date'[Calendar Date] ) = MONTH ( TODAY () ),
+			    "Yes",
+			    "No"
+			)
+			
+			```
+		lineageTag: d998c672-65e8-4100-9990-8e64d9e6e14f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsCurrentYear = ```
+			
+			IF ( YEAR ( 'Date'[Calendar Date] ) = YEAR ( TODAY () ), "Yes", "No" )
+			
+			```
+		lineageTag: 69b507db-da85-47cd-a983-e50f8bd021d6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column calendar_month_number =
+			
+			RIGHT ( 'Date'[Calendar Year Month no.], 2 )
+		isHidden
+		lineageTag: b374a79f-cb7e-41e4-8ac7-3c17e3d97cb1
+		summarizeBy: none
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsLastMonth = ```
+			
+			IF ( 'Date'[Relative Month Number] = -1, "Yes", "No" )
+			
+			```
+		lineageTag: 4c4bee91-c92c-4c1d-ad7d-cf06542e6de6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsLast12WholeMonths = ```
+			
+			IF (
+			    'Date'[Relative Month Number] < 0
+			        && 'Date'[Relative Month Number] > -13,
+			    "Yes",
+			    "No"
+			)
+			
+			```
+		lineageTag: 14a846b1-dc51-4d44-9a02-31a8c11e3749
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarYear =
+			
+			YEAR('Date'[Calendar Date])
+		formatString: 0
+		lineageTag: 96542fa1-051d-4ac5-8a61-c088596c6def
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Relative Month Number' = ```
+			
+			12 * 'Date'[Relative Year Number] + 'Date'[calendar_month_number]
+			    - MONTH ( TODAY () )
+			
+			```
+		lineageTag: 5b637c80-b8cc-43bc-9fda-5fcfad99de21
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Relative Year Number' = 'Date'[CalendarYear]-YEAR(NOW())
+		formatString: 0
+		lineageTag: 3d7954d3-6ab0-4f67-9455-2c51e48af8e9
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Relative Fiscal Year Number' = ```
+			
+			'Date'[fiscal_year_no] - YEAR ( NOW () )
+			    + QUOTIENT ( MONTH ( NOW () ) + ( 13 - 9 ), 13 )
+			
+			```
+		formatString: 0
+		lineageTag: 79b4d521-7bb3-4fe4-b068-ee4d8112c2dc
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Date-5ba32f2e-d4a4-44e3-956f-c36a720cc530 = m
+		mode: import
+		queryGroup: '4-Load to Model'
+		source =
+				let
+				
+				    Source = GCP_dataform_p2p_datamart,
+				    Data = Source{[Name="date_dim_vw",Kind="View"]}[Data],
+				    RenamedColumns = Table.RenameColumns(Data,{{"calendar_date", "Calendar Date"}, {"calendar_day_of_month_no", "Calendar Day of Month no."}, {"calendar_month_name", "Calendar Month Name"}, {"calendar_year_month", "Calendar Year Month no."}, {"day_of_week_name", "Week Day Name"}, {"fiscal_year_month_name", "FY Month Name"}, {"fiscal_year_name", "FY Year"}, {"fiscal_year_tertial_name", "FY Tertial Name"}})
+				in
+				    RenamedColumns
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

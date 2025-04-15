@@ -1,0 +1,415 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 2978.2496002348757,
+        "y": 288.40876323963209
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 805.873537200119
+          },
+          "nodeIndex": "Measurements",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 25
+        },
+        {
+          "location": {
+            "x": 1417.713626020759,
+            "y": 1058.1959768797904
+          },
+          "nodeIndex": "Cost Centre",
+          "nodeLineageTag": "58286c10-1d38-4319-a296-b66e4cf28a4b",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 645.6720883836723,
+            "y": 37.96875
+          },
+          "nodeIndex": "Country",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 12
+        },
+        {
+          "location": {
+            "x": 111.25555313424491,
+            "y": 1323.4326272287599
+          },
+          "nodeIndex": "Date",
+          "nodeLineageTag": "3078d71a-a5b8-41a7-b518-0a5165abd29f",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 24
+        },
+        {
+          "location": {
+            "x": 1721.6125285940727,
+            "y": 762.89577029963687
+          },
+          "nodeIndex": "Exchange Rate",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 1175.5368365450572,
+            "y": 37.96875
+          },
+          "nodeIndex": "GL account",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 10
+        },
+        {
+          "location": {
+            "x": 893.97295801421035,
+            "y": 533.08506338232621
+          },
+          "nodeIndex": "Invoice Line",
+          "nodeLineageTag": "2369565c-a167-4749-bfe0-c6ed6283e2c0",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 21
+        },
+        {
+          "location": {
+            "x": 387.09810723299216,
+            "y": 474.15727744293252
+          },
+          "nodeIndex": "Legal Unit",
+          "nodeLineageTag": "ee59976f-f443-4e54-9c82-3d26b2207e8b",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 23
+        },
+        {
+          "location": {
+            "x": 962.19432862375129,
+            "y": 1674.9427356506278
+          },
+          "nodeIndex": "Purchase Order Line",
+          "nodeLineageTag": "37eaf43f-b505-4776-936a-6379025be2dc",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 14
+        },
+        {
+          "location": {
+            "x": 878.883511065688,
+            "y": 1019.2105742272357
+          },
+          "nodeIndex": "Supplier",
+          "nodeLineageTag": "05bae868-86ec-4283-9479-a271879e0a85",
+          "size": {
+            "height": 557.44167107285784,
+            "width": 343.30266510175852
+          },
+          "zIndex": 15
+        },
+        {
+          "location": {
+            "x": 1277.0860989883672,
+            "y": 1328.9468176804246
+          },
+          "nodeIndex": "Supplier Details",
+          "nodeLineageTag": "a08830df-bc19-4866-b908-30c8cb282a23",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 11
+        },
+        {
+          "location": {
+            "x": 1718.3069728886946,
+            "y": 622.9150350602149
+          },
+          "nodeIndex": "Model Info",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 3784.3580131159142,
+            "y": 559.736640751176
+          },
+          "nodeIndex": "Summarized IM Supplier and Country",
+          "nodeLineageTag": "15a8bdcf-da79-4627-9601-ffb00406004b",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 2580.8002017468534,
+            "y": 367.19024449554627
+          },
+          "nodeIndex": "iShop Content",
+          "nodeLineageTag": "5435ab30-e39d-4ae2-b5cc-7812048c30bb",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 17
+        },
+        {
+          "location": {
+            "x": 1520.3424383940403,
+            "y": 231.12034119276618
+          },
+          "nodeIndex": "Company Function names",
+          "nodeLineageTag": "706677d8-07da-439b-a255-c1dda30b0a1e",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 20
+        },
+        {
+          "location": {
+            "x": 3407.3383025314474,
+            "y": 160.14537597454091
+          },
+          "nodeIndex": "Invoice summary Basware",
+          "nodeLineageTag": "6a450add-2a48-4e3b-a4d6-5a6c32c96e6d",
+          "size": {
+            "height": 321.66778843851239,
+            "width": 234
+          },
+          "zIndex": 16
+        },
+        {
+          "location": {
+            "x": 4061.6043887850656,
+            "y": 117.11702372048742
+          },
+          "nodeIndex": "PO summary iShop",
+          "nodeLineageTag": "e71ff10b-2797-4568-a53e-9b7ab3e3e13e",
+          "size": {
+            "height": 379.38709826249647,
+            "width": 234
+          },
+          "zIndex": 13
+        },
+        {
+          "location": {
+            "x": 2562.6681005719097,
+            "y": 57.935946396556822
+          },
+          "nodeIndex": "Bookmarks",
+          "nodeLineageTag": "810a3e9d-40c8-467a-a206-977c2cc6b283",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 18
+        },
+        {
+          "location": {
+            "x": 2634.0090741367312,
+            "y": 1107.4597242624318
+          },
+          "nodeIndex": "News",
+          "nodeLineageTag": "257de8b8-271e-449a-a786-2cc24499feac",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 2639.8963772975108,
+            "y": 841.72479461077182
+          },
+          "nodeIndex": "Report_Source",
+          "nodeLineageTag": "8c0a7ba1-662d-434c-a9b7-1a81c993d199",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 1269.4591502883507,
+            "y": 595.23358826085428
+          },
+          "nodeIndex": "Business Unit",
+          "nodeLineageTag": "dcf824c5-b68d-4270-8efa-7e9be4df615f",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 4345.6043887850656,
+            "y": 895.20574282531391
+          },
+          "nodeIndex": "zData Dictionary",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4629.6043887850656,
+            "y": 913.58074282531391
+          },
+          "nodeIndex": "P2P Supplier dimensions",
+          "nodeLineageTag": "04e9c790-a303-4291-aa06-99d2cd0609d6",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4913.6043887850656,
+            "y": 905.14324282531391
+          },
+          "nodeIndex": "OGAR Supplier dimensions ",
+          "nodeLineageTag": "1aadf85a-38ee-4e3f-bc39-cd2ef76aabea",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 56.764435120775239,
+      "pinKeyFieldsToTop": true,
+      "showExtraHeaderInfo": true,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    },
+    {
+      "ordinal": 1,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 515.590692124105,
+            "y": 0
+          },
+          "nodeIndex": "Country",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 633.2,
+            "y": 564.3
+          },
+          "nodeIndex": "Invoice Line",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 90.6769291964996,
+            "y": 65.648369132856
+          },
+          "nodeIndex": "Supplier",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 878.08989657915663,
+            "y": 62.365950676213217
+          },
+          "nodeIndex": "Legal Unit",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 888.28671439936352,
+            "y": 566.70827366746221
+          },
+          "nodeIndex": "Purchase Order Line",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 93.630071599045323,
+            "y": 836.40111376292771
+          },
+          "nodeIndex": "Supplier Details",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 8
+        }
+      ],
+      "name": "Layout 1",
+      "zoomValue": 60.930683470673777,
+      "pinKeyFieldsToTop": true,
+      "showExtraHeaderInfo": true,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

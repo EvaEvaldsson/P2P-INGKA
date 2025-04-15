@@ -1,0 +1,164 @@
+expression GCP_environments =
+		let
+		    Source = GoogleBigQuery.Database(null)
+		in
+		    Source
+	lineageTag: 33971fb3-068b-4aaa-aada-19b04b62ad2f
+	queryGroup: '1-Data Sources'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression RangeStart = #datetime(2021, 8, 31, 23, 59, 59) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: 73dd8803-d1f3-4a72-8bde-a288ae54d908
+	queryGroup: Parameters
+
+	annotation PBI_ResultType = Exception
+
+	annotation PBI_NavigationStepName = Navigation
+
+expression RangeEnd = #datetime(2025, 9, 1, 23, 59, 59) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: 1085734f-af51-450a-9404-40b86e8fca03
+	queryGroup: Parameters
+
+	annotation PBI_ResultType = Exception
+
+	annotation PBI_NavigationStepName = Navigation
+
+expression EnvType = "test" meta [IsParameterQuery=true, List={"test", "prod"}, DefaultValue="test", Type="Text", IsParameterQueryRequired=true]
+	lineageTag: c523396a-de4f-4dc5-9f68-1ea340cb0233
+	queryGroup: Parameters
+
+	annotation PBI_ResultType = Text
+
+	annotation PBI_NavigationStepName = Navigation
+
+expression GCP_Golden-1 =
+		let
+		    Source = GCP_environments,
+		    #"ingka-bi-procurement-prod" = Source{[Name="ingka-bi-procurement-prod"]}[Data],
+		    ingka_p2p_prod_datamart_Schema = #"ingka-bi-procurement-prod"{[Name="ingka_p2p_prod_datamart",Kind="Schema"]}[Data],
+		    supplier_golden_vw_View = ingka_p2p_prod_datamart_Schema{[Name="supplier_golden_vw",Kind="View"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(supplier_golden_vw_View, each [tax_registration_number] <> "NO981106431MVA")
+		in
+		    #"Filtered Rows"
+	lineageTag: 54193d2c-faf4-44c6-8f26-1a55f68a55bc
+	queryGroup: 'old tables'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+
+expression GCP_Golden_2 =
+		let
+		    Source = GCP_environments,
+		    #"ingka-bi-procurement-prod" = Source{[Name="ingka-bi-procurement-prod"]}[Data],
+		    ingka_p2p_prod_datamart_Schema = #"ingka-bi-procurement-prod"{[Name="ingka_p2p_prod_datamart",Kind="Schema"]}[Data],
+		    unspsc_spendiq_Table = ingka_p2p_prod_datamart_Schema{[Name="unspsc_spendiq",Kind="Table"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(unspsc_spendiq_Table, each ([Source_Name] = "category_classification_dim_vw_JUNE12"))
+		in
+		    #"Filtered Rows"
+	lineageTag: 6d066cd3-e4b5-4e9a-b8af-54f8c6637991
+	queryGroup: 'old tables'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression New_Goden_supplier = ```
+		let 
+		    Source = #"GCP_Golden-1",
+		    #"Merged Queries" = Table.NestedJoin(Source, {"Supplier_ID"}, GCP_Golden_2, {"Supplier_Id"}, "GCP_Golden_2", JoinKind.LeftOuter),
+		    #"Expanded GCP_Golden_2" = Table.ExpandTableColumn(#"Merged Queries", "GCP_Golden_2", {"Supplier_Id", "Company_Country_Name", "Ingka_Category_Area", "Ingka_Category", "Ingka_Sub_Category", "Unspsc_Code", "Spend"}, {"GCP_Golden_2.Supplier_Id", "GCP_Golden_2.Company_Country_Name", "GCP_Golden_2.Ingka_Category_Area", "GCP_Golden_2.Ingka_Category", "GCP_Golden_2.Ingka_Sub_Category", "GCP_Golden_2.Unspsc_Code", "GCP_Golden_2.Spend"}),
+		    #"Grouped Rows" = Table.Group(#"Expanded GCP_Golden_2", {"tax_registration_number", "indirect_vendor_full_name", "GCP_Golden_2.Company_Country_Name", "GCP_Golden_2.Ingka_Category_Area", "GCP_Golden_2.Ingka_Category", "GCP_Golden_2.Ingka_Sub_Category", "GCP_Golden_2.Unspsc_Code", "GCP_Golden_2.Spend"}, {{"Count", each _, type table [tax_registration_number=nullable text, Supplier_ID=nullable text, indirect_vendor_full_name=nullable text, net_amount_eur=nullable number, gold_rank=nullable number, GCP_Golden_2.Supplier_Id=nullable text, GCP_Golden_2.Company_Country_Name=nullable text, GCP_Golden_2.Ingka_Category_Area=nullable text, GCP_Golden_2.Ingka_Category=nullable text, GCP_Golden_2.Ingka_Sub_Category=nullable text, GCP_Golden_2.Unspsc_Code=nullable text, GCP_Golden_2.Spend=nullable number]}}),
+		    #"Added Custom" = Table.AddColumn(#"Grouped Rows", "Custom", each Table.Column([Count],"Supplier_ID")),
+		    #"Extracted Values" = Table.TransformColumns(#"Added Custom", {"Custom", each Text.Combine(List.Transform(_, Text.From), ","), type text}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Extracted Values",{{"tax_registration_number", "Gold tax_registration_number"}, {"indirect_vendor_full_name", "Golden Vendor Name"}, {"GCP_Golden_2.Company_Country_Name", "Country_Name"}, {"GCP_Golden_2.Ingka_Category_Area", "Category_Area"}, {"GCP_Golden_2.Ingka_Category", "Category"}, {"GCP_Golden_2.Ingka_Sub_Category", "Sub_Category"}, {"GCP_Golden_2.Unspsc_Code", "UNSPC_Code"}, {"GCP_Golden_2.Spend", "Spend"}}),
+		    #"Filtered Rows" = Table.SelectRows(#"Renamed Columns", each ([Gold tax_registration_number] <> null))
+		in
+		    #"Filtered Rows"
+		```
+	lineageTag: b82851c8-b84f-49ab-8b93-aaeb2a5cda9c
+	queryGroup: 'old tables'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Business Unit (pnl)' =
+		let
+		
+		    Source = GCP_dataform_p2p_datamart,
+		    Data = Source{[Name="business_unit_pnl_dim_vw",Kind="View"]}[Data],
+		    RenamedColumns = Table.RenameColumns(Data,{{"business_unit_type_name", "Business Unit Group"}, {"business_unit_type", "Business Type"}, {"business_unit_full_name", "Business Unit Name"}, {"business_unit_id", "Business Unit ID"}, {"business_unit_code_name", "Business Unit Code Name"}, {"valid_from_date", "Valid from Date"}, {"valid_to_date", "Valid to Date"}}),
+		    RemovedColumns = Table.RemoveColumns(RenamedColumns,{"scd_start_dttm", "scd_end_dttm"})
+		in
+		    RemovedColumns
+	lineageTag: cecda2b5-7776-422f-b78a-b8a035d3f38c
+	queryGroup: '4-Load to Model'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression GCP_dataform_p2p_datamart =
+		let
+		    Source = GCP_environments,
+		    Environment = Source{[Name="ingka-procbi-reporting-" & EnvType]}[Data],
+		    Schema = Environment{[Name="ingka_p2p_datamart",Kind="Schema"]}[Data]
+		in
+		    Schema
+	lineageTag: 03546815-7cc6-4df8-ac83-a7eb1f1ae782
+	queryGroup: '1-Data Sources'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression GCP_dataform_procBi_datamart =
+		let
+		    Source = GCP_environments,
+		    #"ingka-procbi-reporting-test" = Source{[Name="ingka-procbi-reporting-test"]}[Data],
+		    procbi_datamart_Schema = #"ingka-procbi-reporting-test"{[Name="procbi_datamart",Kind="Schema"]}[Data]
+		in
+		    procbi_datamart_Schema
+	lineageTag: cdd708e7-e916-4d57-8776-5cc283e4b54b
+	queryGroup: '1-Data Sources'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Invoice summary Basware PQ' =
+		let
+		    Source = #"Invoice Line",
+		    MergedQueries_GL_Account = Table.NestedJoin(Source, {"global_GL_no"}, #"GL account", {"GL Account Number"}, "GL account", JoinKind.LeftOuter),
+		    Expanded_GL_account = Table.ExpandTableColumn(MergedQueries_GL_Account, "GL account", {"Spend Group 1"}, {"Spend Group 1"}),
+		    FilteredRows = Table.SelectRows(Expanded_GL_account, each (Text.Lower([Spend Group 1]) <> "service business")),
+		    GroupedRows = Table.Group(FilteredRows, {"Invoice Reference ID", "Order Number", "Currency Code", "Match Status", "match", "compliance", "country_code", "Supplier ID", "invoiceformat", "Has Payment on Time", "Payment Terms", "Source"}, {{"Invoiced amount (original currency)", each List.Sum([net_amount]), type nullable number}, {"Invoiced amount (EUR)", each List.Sum([net_amount_eur]), type nullable number}, {"Transfer date", each List.Max([Transfer Date]), type nullable date}, {"Payment date", each List.Max([Invoice Payment Date]), type nullable date}, {"Entry date", each List.Max([Entry Date]), type nullable date}, {"Invoice date", each List.Max([Invoice Date]), type nullable date}}),
+		    AddColumn_noDaysToTransfer = Table.AddColumn(GroupedRows, "Number of days entry to transfer date", each Duration.Days([Transfer date] - [Entry date]), Int64.Type),
+		    AddColumn_noDaysToEntryDate = Table.AddColumn(AddColumn_noDaysToTransfer, "Number of days Invoice date to Entry date", each Duration.Days([Entry date] - [Invoice date]), Int64.Type)
+		in
+		    AddColumn_noDaysToEntryDate
+	lineageTag: 458faeb8-a57f-4e43-a0a0-07c70b0b32f1
+	queryGroup: '4-Load to Model'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+
+expression 'PO Summary' =
+		let
+		    Source = #"Purchase Order Line",
+		    GroupedRows = Table.Group(Source, {"Order Number"}, {{"Order value (original currency)", each List.Sum([#"Value (original currency)"]), type nullable number}, {"Latest order date", each List.Max([Order Date]), type nullable date}, {"Latest change date", each List.Max([Changed Date]), type nullable date}, {"Order Value (€)", each List.Sum([new_value_eur]), type nullable number}}),
+		    #"Merged Queries" = Table.NestedJoin(GroupedRows, {"Order Number"}, #"Invoice summary Basware PQ", {"Order Number"}, "Invoice summary Basware PQ", JoinKind.LeftOuter)
+		in
+		    #"Merged Queries"
+	lineageTag: d14a126c-4ecb-48f7-b56b-4ba2cce28bea
+	queryGroup: '4-Load to Model'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

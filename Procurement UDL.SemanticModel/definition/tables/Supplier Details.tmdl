@@ -1,0 +1,221 @@
+table 'Supplier Details'
+	lineageTag: a08830df-bc19-4866-b908-30c8cb282a23
+
+	measure 'Supplier details number' =
+			
+			COUNTROWS ( 'Supplier Details' )
+		formatString: 0
+		lineageTag: 1090f64e-3d57-475e-9f65-91170e26e224
+
+	measure 'Supplier tax reg numbers' =
+			
+			DISTINCTCOUNT ( 'Supplier Details'[Tax Registration Number] )
+		formatString: 0
+		lineageTag: 65032583-b924-43f4-b6b6-2666fd0037f4
+
+	column vendor_bk
+		dataType: string
+		lineageTag: 54b8a8e5-2e3c-4587-a151-3ae610b7e66f
+		summarizeBy: none
+		sourceColumn: vendor_bk
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendor_code
+		dataType: string
+		lineageTag: 1129b167-8a76-4f93-9ce6-344a97be2618
+		summarizeBy: none
+		sourceColumn: vendor_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendor_type
+		dataType: string
+		lineageTag: 243451ba-29d7-4ff7-bf5d-e100c33c2034
+		summarizeBy: none
+		sourceColumn: vendor_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Identification  Number'
+		dataType: string
+		lineageTag: 6370fd94-9ce5-4540-b5c5-6fa02afb930e
+		summarizeBy: none
+		sourceColumn: Identification  Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Identification Type'
+		dataType: string
+		lineageTag: 63861ecd-f986-47e3-8826-1aa0aa4f02b7
+		summarizeBy: none
+		sourceColumn: Identification Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Vendor Email Addresses'
+		dataType: string
+		lineageTag: cf03cc5c-18bf-4da7-b9fd-96108b441bf7
+		summarizeBy: none
+		sourceColumn: Vendor Email Addresses
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Vendor Other Media Addresses'
+		dataType: string
+		lineageTag: f89609ae-98de-4166-a7f3-170768de1296
+		summarizeBy: none
+		sourceColumn: Vendor Other Media Addresses
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ordering Country  Code'
+		dataType: string
+		lineageTag: d36477cf-e27f-4d5b-a3c4-aceea5844597
+		summarizeBy: none
+		sourceColumn: Ordering Country  Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier in iShop'
+		dataType: string
+		lineageTag: 1d9f3534-7b71-479a-8549-936d0f27dae5
+		summarizeBy: none
+		sourceColumn: Supplier in iShop
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency Code Order'
+		dataType: string
+		lineageTag: 0efc475c-7b7e-4ced-a061-c37600c34904
+		summarizeBy: none
+		sourceColumn: Currency Code Order
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tax Geographical Area'
+		dataType: string
+		lineageTag: 8e486003-c9ad-4aef-b671-fbefc5fa79c0
+		summarizeBy: none
+		sourceColumn: Tax Geographical Area
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tax Registration Type'
+		dataType: string
+		lineageTag: 8a639c28-15ef-46b1-ab0c-a1df946872ee
+		summarizeBy: none
+		sourceColumn: Tax Registration Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tax Registration Number'
+		dataType: string
+		lineageTag: 21d7a2a9-3755-4c64-b89c-7be761a2e937
+		summarizeBy: none
+		sourceColumn: Tax Registration Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Bank Account Number'
+		dataType: string
+		lineageTag: c35fd252-ce4e-4e2a-95a5-c319a5fbd512
+		summarizeBy: none
+		sourceColumn: Bank Account Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Bank Name'
+		dataType: string
+		lineageTag: aaa178b6-b0eb-47ad-b2dd-58ddb91419af
+		summarizeBy: none
+		sourceColumn: Bank Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Swift Code'
+		dataType: string
+		lineageTag: 21cfd5c0-927e-4c95-897b-23c8836246bd
+		summarizeBy: none
+		sourceColumn: Swift Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ordering Country Name'
+		dataType: string
+		lineageTag: 24600877-dfba-4d31-b93f-f46aefac6464
+		summarizeBy: none
+		sourceColumn: Ordering Country Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column bank_currency
+		dataType: string
+		lineageTag: b4f7db1f-d0a9-4c4b-97ce-16d321b834cf
+		summarizeBy: none
+		sourceColumn: bank_currency
+
+		annotation SummarizationSetBy = Automatic
+
+	column iShopContent
+		dataType: string
+		lineageTag: 69d59a24-95e9-4775-853f-a41bf5399571
+		summarizeBy: none
+		sourceColumn: iShopContent
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Supplier ID'
+		dataType: string
+		lineageTag: 215a85e3-d457-441b-b603-32a94dc5833c
+		summarizeBy: none
+		sourceColumn: Supplier ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Bank Country Code'
+		dataType: string
+		lineageTag: c0bcba41-e738-41b5-a2e9-8341940d08e4
+		summarizeBy: none
+		sourceColumn: Bank Country Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_system
+		dataType: string
+		lineageTag: d1a9e45b-44ad-40fa-91fb-ef676da194dc
+		summarizeBy: none
+		sourceColumn: source_system
+
+		annotation SummarizationSetBy = Automatic
+
+	column creation_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 89ec1401-1be9-4b3c-9564-18f6c0144eff
+		summarizeBy: none
+		sourceColumn: creation_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition 'Supplier Details-26c41555-8331-42f6-a50c-9bc016a8c4aa' = m
+		mode: import
+		queryGroup: '4-Load to Model'
+		source = ```
+				let
+				    
+				    Source = GCP_dataform_p2p_datamart,
+				    Data = Source{[Name="supplier_details_vw",Kind="View"]}[Data],
+				    FilteredRows = Table.SelectRows(Data, each ([IncludeSupplier] = "Yes")),
+				    RemovedColumns = Table.RemoveColumns(FilteredRows,{"IncludeSupplier"}),
+				    RenamedColumns = Table.RenameColumns(RemovedColumns,{{"identification_number", "Identification  Number"}, {"identification_type", "Identification Type"}, {"vendor_email_addresses", "Vendor Email Addresses"}, {"vendor_other_media_addresses", "Vendor Other Media Addresses"}, {"ordering_country_code", "Ordering Country  Code"}, {"supplier_in_ishop", "Supplier in iShop"}, {"currency_code_order", "Currency Code Order"}, {"tax_geographical_area", "Tax Geographical Area"}, {"tax_reg_type", "Tax Registration Type"}, {"tax_reg_num", "Tax Registration Number"}, {"bank_account_num", "Bank Account Number"}, {"bank_name", "Bank Name"}, {"swift_code", "Swift Code"}, {"bank_country_code", "Bank Country Code"}, {"name", "Ordering Country Name"}, {"supplier_id", "Supplier ID"}})
+				in
+				    RenamedColumns
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

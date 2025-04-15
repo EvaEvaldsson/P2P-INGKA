@@ -1,0 +1,140 @@
+table 'PO summary iShop'
+	lineageTag: e71ff10b-2797-4568-a53e-9b7ab3e3e13e
+
+	measure 'Number of POs' = DISTINCTCOUNT('PO summary iShop'[Order Number])
+		formatString: 0
+		lineageTag: 581d1df1-8b18-44fc-8172-497078652d82
+
+	column 'Order Number'
+		lineageTag: d3ed9420-3374-418c-bb17-6b195664af47
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Purchase Order Line[Order Number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order value (original currency)'
+		lineageTag: 69f4307a-2489-4972-82ae-6c7114d50fd0
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Order value (original currency)]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Latest order date'
+		formatString: General Date
+		lineageTag: 4c0c4743-ace5-44d5-84a9-b8d22a0d6879
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Latest order date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Latest change date'
+		formatString: General Date
+		lineageTag: d055581c-1ea3-4bc7-a94a-e495f8249869
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Latest change date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Value (€)'
+		lineageTag: 0eb618b3-630e-4003-8156-0dcc4d9565ae
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Order Value (€)]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Number of invoices for the PO' = CALCULATE(DISTINCTCOUNT('Invoice summary Basware'[Invoice Reference ID]))
+		formatString: 0
+		lineageTag: 80b04ea2-b522-454c-a1cc-d25622326509
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Diff group' =
+			SWITCH(
+			    TRUE(),
+			    'PO summary iShop'[diff PO to invoice (EUR)] =0, "1 No diff",
+			    'PO summary iShop'[Number of invoices for the PO] =0, "No invoice",
+			    'PO summary iShop'[diff PO to invoice (EUR)] >-5 &&  'PO summary iShop'[diff PO to invoice (EUR)] <5, "2 +-5 EUR or 1%",
+			    'PO summary iShop'[diff PO to invoice (%)] >-0.01 &&  'PO summary iShop'[diff PO to invoice (%)]<0.01,"2 +-5 EUR or 1%",
+			    'PO summary iShop'[diff PO to invoice (EUR)] >=-25 &&  'PO summary iShop'[diff PO to invoice (EUR)] <=25, "3 +-25 EUR",
+			    'PO summary iShop'[diff PO to invoice (EUR)] <-25  || 'PO summary iShop'[diff PO to invoice (EUR)] >25, "4 Diff bigger than +-25 EUR",
+			"N/A"
+			)
+		lineageTag: b0dc17e0-785c-45f3-b5a4-362716adda2a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'diff PO to invoice (%)' = ```
+			
+			    DIVIDE(
+			        'PO summary iShop'[Order Value (€)]- CALCULATE(SUM('Invoice summary Basware'[Invoiced amount (EUR)])),
+			        'PO summary iShop'[Order Value (€)]
+			    )
+			
+			```
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: b58a7e6c-4826-490f-bed9-61b0b3cde1d9
+		summarizeBy: sum
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'diff PO to invoice (EUR)' = 'PO summary iShop'[Order Value (€)]- CALCULATE(SUM('Invoice summary Basware'[Invoiced amount (EUR)]))
+		formatString: 0.00
+		lineageTag: 17944c03-9177-457f-8b81-ee2de92ffd56
+		summarizeBy: sum
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'diff PO to invoice (orig curr)' = 'PO summary iShop'[Order value (original currency)]- CALCULATE(SUM('Invoice summary Basware'[Invoiced amount (original currency)]))
+		lineageTag: 29c2bead-c839-4a36-8f91-122d045e2d14
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Number of invoices per PO and match of net amount or not' =
+			SWITCH(
+			    TRUE(),
+			    'PO summary iShop'[Number of invoices for the PO] =1 && 'PO summary iShop'[diff PO to invoice (orig curr)] =0, "One Invoice per PO, Amount matches exactly",
+			    'PO summary iShop'[Number of invoices for the PO] =1 && 'PO summary iShop'[diff PO to invoice (orig curr)] <>0, "One Invoice per PO, Amount does not match",
+			    'PO summary iShop'[Number of invoices for the PO] >1 && 'PO summary iShop'[diff PO to invoice (orig curr)] =0, "Multiple Invoices per PO, total Amount matches exactly",
+			    'PO summary iShop'[Number of invoices for the PO] >1 && 'PO summary iShop'[diff PO to invoice (orig curr)] <>0, "Multiple Invoices per PO, total Amount does not match",
+			    'PO summary iShop'[Number of invoices for the PO] =0, "No invoice",
+			"N/A"
+			
+			)
+		lineageTag: 2dcdf1a8-cc97-403c-a11c-6593d599511e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'PO summary iShop-f3282db4-3640-40bd-83e0-5c02ceb9562c' = calculated
+		mode: import
+		source = ```
+				
+				SUMMARIZECOLUMNS(
+				    'Purchase Order Line'[Order Number],
+				    "Order value (original currency)",  SUM ('Purchase Order Line'[Value (original currency)]), 
+				    "Latest order date",   MAX('Purchase Order Line'[Order Date]),
+				    "Latest change date", MAX('Purchase Order Line'[Changed Date]),
+				    "Order Value (€)", SUM ( 'Purchase Order Line'[new_value_eur] )
+				)
+				```
+
+	annotation PBI_Id = 89e62264f91744488823f40d9a59e9aa
+
