@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.6.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.7.0/schema.json",
   "name": "3d81ecc08647bc5e08d9",
   "position": {
     "x": 854.30523917995447,
@@ -70,10 +70,10 @@
                     "Entity": "News"
                   }
                 },
-                "Property": "Date"
+                "Property": "Information"
               }
             },
-            "direction": "Descending"
+            "direction": "Ascending"
           }
         ]
       }
